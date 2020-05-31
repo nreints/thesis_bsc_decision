@@ -21,13 +21,15 @@ class FINDJUST:
         print(".... The axioms in the normative basis are: ", ", ".join([axiom.toString() for axiom in normativeBasis]))
         explanation = {}
         foundExplanation = False
+        nbExp = 0
 
         axiomsOutcome, axiomsAlternative = self.splitAxioms(normativeBasis)
 
         for axiom in axiomsOutcome:
             winner, instance = axiom.getWinner(self.profile, self.nbAlternatives, self.nbVoters)
             if Counter([winner]) == Counter(self.outcome):
-                explanation[axiom] = [instance]
+                explanation[nbExp] = [instance]
+                nbExp += 1
                 foundExplanation = True
         
         posOutcomes = list(allSublists(self.profile[0]))
@@ -36,19 +38,24 @@ class FINDJUST:
 
         posExplanation = []
         for axiom in axiomsAlternative:
-            alternative, instance = axiom.getAlternative(self.profile, self.nbAlternatives, self.nbVoters)
+            alternatives, instances = axiom.getInstance(self.profile, self.nbAlternatives, self.nbVoters)
             copyPosOutcomes = posOutcomes.copy()
-            for outcome in copyPosOutcomes:
-                for alt in alternative:
-                    if alt in outcome and outcome in posOutcomes:
+            for i in range(len(alternatives)):
+                for outcome in copyPosOutcomes:
+                    if (alternatives[i] in outcome) and (outcome in posOutcomes):
                         posOutcomes.remove(outcome)
-                        posExplanation.append((axiom, instance))
-        
+                if len(posOutcomes) < len(copyPosOutcomes):
+                    posExplanation.append(instances[i])
+
+
             if posOutcomes == []:
-                for axiom, instance in posExplanation:
-                    explanation[axiom] = [instance]
+                for instance in posExplanation:
+                    if nbExp in explanation.keys():
+                        explanation[nbExp] += [instance]
+                    else:
+                        explanation[nbExp] = [instance]
                 foundExplanation = True
-        
+
         if foundExplanation:
             return explanation
 
