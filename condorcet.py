@@ -1,4 +1,5 @@
 from helperFunctions import alternatives, allAlternatives, prefers, allVoters
+from instance import *
 
 class CondorcetAxiom:
 
@@ -18,11 +19,9 @@ class CondorcetAxiom:
                 if voters > (nbVoters/2):
                     timesY += 1
             if timesY == nbAlternatives - 1:
-                return x, (profile, x, alternatives(nbAlternatives, lambda y: y != x))
+                description = "The majority of voters prefers " + str(x) + " over all other alternatives"
+                return x, instance(self, description)
         return None, ()
-
-    def printInstance(self, instance):
-        print("In profile ", instance[0], ": the majority of voters prefers ", instance[1], " over ",  str(instance[2]), "  (", self.description,")")
 
     def toString(self):
         return self.description

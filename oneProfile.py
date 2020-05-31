@@ -18,7 +18,7 @@ class FINDJUST:
         print(".... Trying to find a justification for the profile and outcome ....")
         print(".... The target profile is: ", self.profile)
         print(".... The target outcome is: ", self.outcome)
-        print(".... The axioms in the normative basis are: ", ", ".join([i.toString() for i in normativeBasis]))
+        print(".... The axioms in the normative basis are: ", ", ".join([axiom.toString() for axiom in normativeBasis]))
         explanation = {}
         foundExplanation = False
 
@@ -43,11 +43,11 @@ class FINDJUST:
                     if alt in outcome and outcome in posOutcomes:
                         posOutcomes.remove(outcome)
                         posExplanation.append((axiom, instance))
-
-        if posOutcomes == []:
-            for axiom, instance in posExplanation:
-                explanation[axiom] = instance
-            foundExplanation = True
+        
+            if posOutcomes == []:
+                for axiom, instance in posExplanation:
+                    explanation[axiom] = [instance]
+                foundExplanation = True
         
         if foundExplanation:
             return explanation
@@ -70,7 +70,7 @@ class FINDJUST:
             for key in exp:
                 print("Found an explanation of size ", len(exp[key]), ":")
                 for instance in exp[key]:
-                    key.printInstance(instance)
+                    instance.toString()
                 print()
 
 
@@ -80,6 +80,6 @@ con = CondorcetAxiom()
 faith = Faithfulness()
 normativeBasis = [par, con, faith]
 
-thing = FINDJUST([[1,0,2], [1, 2, 0]], [1])
+thing = FINDJUST([[1,2,0], [1, 2, 0], [1,2,0]], [1])
 exp = thing.solve(normativeBasis)
 thing.printExplanation(exp)

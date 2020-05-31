@@ -1,4 +1,4 @@
-# from helperFunctions import 
+from instance import *
 
 class Faithfulness:
 
@@ -9,11 +9,9 @@ class Faithfulness:
 
     def getWinner(self, profile, nbAlternatives, nbVoters):
         if nbVoters == 1:
-            return profile[0][0], (profile, profile[0][0])
+            description = "The top alternative " + str(profile[0][0]) + " should be chosen"
+            return profile[0][0], instance(self, description)
         return None, ()
-
-    def printInstance(self, instance):
-        print("In profile ", instance[0], ": the most preferred option should be chosen ",  instance[1], "  (", self.description,")")
 
     def toString(self):
         return self.description
