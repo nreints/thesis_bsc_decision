@@ -8,7 +8,7 @@ class ParetoAxiom:
         self.type = "alternative"
 
     def getInstance(self, profile, nbAlternatives, nbVoters):
-        deleteAlternative, inst = [], []
+        deleteAlternative, instances = [], []
         for x in allAlternatives(nbAlternatives):
             for y in alternatives(nbAlternatives, lambda y : y != x):    
                 dominated = 0
@@ -18,8 +18,8 @@ class ParetoAxiom:
                 if dominated == nbVoters and y not in deleteAlternative:
                     deleteAlternative.append(y)
                     description = str(y) + " is dominated by " +  str(x)
-                    inst += [instance(self, description)]
-        return deleteAlternative, inst
+                    instances += [instance(self, description)]
+        return deleteAlternative, instances
 
     def toString(self):
         return self.description

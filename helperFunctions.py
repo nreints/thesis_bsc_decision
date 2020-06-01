@@ -34,3 +34,8 @@ def removeOutcome(posOutcomes, targOutcome):
             break
     return posOutcomes
 
+
+# Return top alternative in preference
+def topAlternative(profile):
+    return profile[0]
+

@@ -3,6 +3,7 @@ from helperFunctions import allSublists, allVoters, allAlternatives, removeOutco
 from pareto import *
 from condorcet import *
 from faithfulness import *
+from cancellation import *
 
 class FINDJUST:
 
@@ -26,8 +27,8 @@ class FINDJUST:
         axiomsOutcome, axiomsAlternative = self.splitAxioms(normativeBasis)
 
         for axiom in axiomsOutcome:
-            winner, instance = axiom.getWinner(self.profile, self.nbAlternatives, self.nbVoters)
-            if Counter([winner]) == Counter(self.outcome):
+            winner, instance = axiom.getInstance(self.profile, self.nbAlternatives, self.nbVoters)
+            if Counter(winner) == Counter(self.outcome):
                 explanation[nbExp] = [instance]
                 nbExp += 1
                 foundExplanation = True
@@ -47,17 +48,10 @@ class FINDJUST:
                 if len(posOutcomes) < len(copyPosOutcomes):
                     posExplanation.append(instances[i])
 
-
             if posOutcomes == []:
-                for instance in posExplanation:
-                    if nbExp in explanation.keys():
-                        explanation[nbExp] += [instance]
-                    else:
-                        explanation[nbExp] = [instance]
+                explanation[nbExp] = posExplanation
                 foundExplanation = True
-
-        if foundExplanation:
-            return explanation
+        return explanation
 
     def splitAxioms(self, normativeBasis):
         axiomsOutcome, axiomsAlternative = [], []
@@ -85,8 +79,9 @@ class FINDJUST:
 par = ParetoAxiom()
 con = CondorcetAxiom()
 faith = Faithfulness()
-normativeBasis = [par, con, faith]
+can = Cancellation()
+normativeBasis = [par, con, faith, can]
 
-thing = FINDJUST([[1,2,0], [1, 2, 0], [1,2,0]], [1])
+thing = FINDJUST([[1,0,2], [1,0,2]], [1])
 exp = thing.solve(normativeBasis)
 thing.printExplanation(exp)

@@ -1,4 +1,5 @@
 from instance import *
+from helperFunctions import topAlternative
 
 class Faithfulness:
 
@@ -7,11 +8,12 @@ class Faithfulness:
         self.type = "outcome"
         
 
-    def getWinner(self, profile, nbAlternatives, nbVoters):
+    def getInstance(self, profile, nbAlternatives, nbVoters):
         if nbVoters == 1:
             description = "The top alternative " + str(profile[0][0]) + " should be chosen"
-            return profile[0][0], instance(self, description)
-        return None, ()
+            winner = topAlternative(profile[0])
+            return winner, instance(self, description)
+        return None, None
 
     def toString(self):
         return self.description
