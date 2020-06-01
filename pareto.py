@@ -17,8 +17,8 @@ class ParetoAxiom:
                         dominated += 1
                 if dominated == nbVoters and y not in deleteAlternative:
                     deleteAlternative.append(y)
-                    description = str(y) + " is dominated by " +  str(x)
-                    instances += [instance(self, description)]
+                    descriptionInst = str(y) + " is dominated by " +  str(x)
+                    instances += [instance(self, descriptionInst)]
         return deleteAlternative, instances
 
     def toString(self):

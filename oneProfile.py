@@ -21,7 +21,6 @@ class FINDJUST:
         print(".... The target outcome is: ", self.outcome)
         print(".... The axioms in the normative basis are: ", ", ".join([axiom.toString() for axiom in normativeBasis]))
         explanation = {}
-        foundExplanation = False
         nbExp = 0
 
         axiomsOutcome, axiomsAlternative = self.splitAxioms(normativeBasis)
@@ -31,10 +30,10 @@ class FINDJUST:
             if Counter(winner) == Counter(self.outcome):
                 explanation[nbExp] = [instance]
                 nbExp += 1
-                foundExplanation = True
         
         posOutcomes = list(allSublists(self.profile[0]))
-        # Delete target outcome from possible outcomes 
+        
+        # Delete target outcome from possible outcomes
         posOutcomes = removeOutcome(posOutcomes, self.outcome)
 
         posExplanation = []
@@ -47,10 +46,9 @@ class FINDJUST:
                         posOutcomes.remove(outcome)
                 if len(posOutcomes) < len(copyPosOutcomes):
                     posExplanation.append(instances[i])
-
             if posOutcomes == []:
                 explanation[nbExp] = posExplanation
-                foundExplanation = True
+
         return explanation
 
     def splitAxioms(self, normativeBasis):
@@ -82,6 +80,6 @@ faith = Faithfulness()
 can = Cancellation()
 normativeBasis = [par, con, faith, can]
 
-thing = FINDJUST([[1,0,2], [2,0,1]], [1,0,2])
+thing = FINDJUST([[2,0,1], [2,0,1]], [2])
 exp = thing.solve(normativeBasis)
 thing.printExplanation(exp)

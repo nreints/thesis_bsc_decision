@@ -10,9 +10,9 @@ class Faithfulness:
 
     def getInstance(self, profile, nbAlternatives, nbVoters):
         if nbVoters == 1:
-            description = "The top alternative " + str(profile[0][0]) + " should be chosen"
+            descriptionInst = "The top alternative " + str(profile[0][0]) + " should be chosen"
             winner = topAlternative(profile[0])
-            return winner, instance(self, description)
+            return winner, instance(self, descriptionInst)
         return None, None
 
     def toString(self):

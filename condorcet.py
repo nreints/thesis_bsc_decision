@@ -19,8 +19,8 @@ class CondorcetAxiom:
                 if voters > (nbVoters/2):
                     timesY += 1
             if timesY == nbAlternatives - 1:
-                description = "The majority of voters prefers " + str(x) + " over all other alternatives"
-                return [x], instance(self, description)
+                descriptionInst = "The majority of voters prefers " + str(x) + " over all other alternatives"
+                return [x], instance(self, descriptionInst)
         return None, None
 
     def toString(self):
