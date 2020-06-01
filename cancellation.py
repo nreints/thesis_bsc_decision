@@ -9,9 +9,9 @@ class Cancellation:
 
     def getInstance(self, profile, nbAlternatives, nbVoters):
         perfTie = 0
-        skip = []
-        for x in allAlternatives(nbAlternatives):
-            for y in alternatives(nbAlternatives, lambda y : y != x):
+        xSkip = []
+        for x in alternatives(nbAlternatives, lambda x: x not in xSkip):
+            for y in alternatives(nbAlternatives, lambda y : y != x and y not in xSkip):
                 XOverY, YOverX = 0, 0
                 for i in allVoters(nbVoters):
                     if prefers(i, x, y, profile):
@@ -20,7 +20,7 @@ class Cancellation:
                         YOverX += 1
                 if XOverY == YOverX:
                     perfTie += 1
-                    skip += [x, y]
+                    xSkip += [x]
 
         if perfTie >= nbAlternatives:
             description = "There exists a perfect tie so all alternatives should win"
