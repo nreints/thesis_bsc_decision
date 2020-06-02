@@ -8,12 +8,12 @@ class Faithfulness:
         self.type = "outcome"
         
 
-    def getInstance(self, profile, nbAlternatives, nbVoters):
+    def getInstances(self, profile, nbAlternatives, nbVoters):
         if nbVoters == 1:
-            descriptionInst = "The top alternative " + str(profile[0][0]) + " should be chosen"
+            description = "The top alternative " + str(profile[0][0]) + " should be chosen"
             winner = topAlternative(profile[0])
-            return winner, instance(self, descriptionInst)
-        return None, None
+            return [instance(self, [winner], description)]
+        return None
 
     def toString(self):
         return self.description

@@ -7,7 +7,7 @@ class Cancellation:
         self.description = "Cancellation"
         self.type = "outcome"
 
-    def getInstance(self, profile, nbAlternatives, nbVoters):
+    def getInstances(self, profile, nbAlternatives, nbVoters):
         perfTie = 0
         xSkip = []
         for x in alternatives(nbAlternatives, lambda x: x not in xSkip):
@@ -23,9 +23,9 @@ class Cancellation:
                     xSkip += [x]
 
         if perfTie >= nbAlternatives:
-            descriptionInst = "There exists a perfect tie so all alternatives should win"
-            return allAlternatives(nbAlternatives), instance(self, descriptionInst)
-        return None, None
+            description = "There exists a perfect tie so all alternatives should win"
+            return [instance(self, allAlternatives(nbAlternatives), description)]
+        return None
 
     def toString(self):
         return self.description

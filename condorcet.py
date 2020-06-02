@@ -8,7 +8,7 @@ class CondorcetAxiom:
         self.type = "outcome"
         
 
-    def getInstance(self, profile, nbAlternatives, nbVoters):
+    def getInstances(self, profile, nbAlternatives, nbVoters):
         for x in allAlternatives(nbAlternatives):
             timesY = 0
             for y in alternatives(nbAlternatives, lambda y: x != y):
@@ -19,9 +19,9 @@ class CondorcetAxiom:
                 if voters > (nbVoters/2):
                     timesY += 1
             if timesY == nbAlternatives - 1:
-                descriptionInst = "The majority of voters prefers " + str(x) + " over all other alternatives"
-                return [x], instance(self, descriptionInst)
-        return None, None
+                description = "The majority of voters prefers " + str(x) + " over all other alternatives"
+                return [instance(self, [x], description)]
+        return None
 
     def toString(self):
         return self.description
