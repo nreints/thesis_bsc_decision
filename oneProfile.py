@@ -20,13 +20,13 @@ class FINDJUST:
         print("\t.... The target profile is: ", self.profile)
         print("\t.... The target outcome is: ", self.outcome)
         print("\t.... The axioms in the normative basis are: ", ", ".join([axiom.toString() for axiom in normativeBasis]))
-        explanation = {}
+        explanation, normBasis = {}, {}
         nbExp = 0
 
         # allInstances = self.getAllInstances(normativeBasis)
 
         axiomsOutcome, axiomsAlternative = self.splitAxioms(normativeBasis)
-
+        
         for axiom in axiomsOutcome:
             instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
             if instances:
@@ -34,6 +34,7 @@ class FINDJUST:
                     winner = instance.alternatives
                     if Counter(winner) == Counter(self.outcome):
                         explanation[nbExp] = [instance]
+                        normBasis[nbExp] = axiom
                         nbExp += 1
         
         posOutcomes = list(allSublists(self.profile[0]))
@@ -53,8 +54,9 @@ class FINDJUST:
                         posExplanation.append(instances[i])
                 if posOutcomes == []:
                     explanation[nbExp] = posExplanation
+                    normBasis[nbExp] = axiom
                     nbExp += 1
-        return explanation
+        return explanation, normBasis
 
     # Spit normative basis
     def splitAxioms(self, normativeBasis):
@@ -75,13 +77,14 @@ class FINDJUST:
         return allInstances
 
     # Print explanation
-    def printExplanation(self, exp):
+    def printExplanation(self, exp, normBasis):
         print("+++++++++++++++++++++++++++++++++++++++++++++++")
         if not exp:
             print("No explanation found")
         else:
             for key in exp:
                 print("Found an explanation of size ", len(exp[key]), ":")
+                print("Normative basis : ", normBasis[key].description)
                 for instance in exp[key]:
                     instance.toString()
                 print()
@@ -94,6 +97,6 @@ faith = Faithfulness()
 can = Cancellation()
 normativeBasis = [par, con, faith, can]
 
-thing = FINDJUST([[2,0,1]], [2])
-exp = thing.solve(normativeBasis)
-thing.printExplanation(exp)
+thing = FINDJUST([[2,0,1], [2,1,0]], [2])
+exp, normBasis = thing.solve(normativeBasis)
+thing.printExplanation(exp, normBasis)

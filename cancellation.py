@@ -23,8 +23,8 @@ class Cancellation:
                     xSkip += [x]
 
         if perfTie >= nbAlternatives:
-            description = "There exists a perfect tie so all alternatives should win"
-            return [instance(self, allAlternatives(nbAlternatives), description)]
+            instDescription = "There exists a perfect tie so all alternatives should win"
+            return [instance(self, allAlternatives(nbAlternatives), instDescription)]
         return None
 
     def toString(self):
