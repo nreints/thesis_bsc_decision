@@ -25,37 +25,89 @@ class FINDJUST:
 
         # allInstances = self.getAllInstances(normativeBasis)
 
-        axiomsOutcome, axiomsAlternative = self.splitAxioms(normativeBasis)
-        
-        for axiom in axiomsOutcome:
-            instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
-            if instances:
-                for instance in instances:
-                    winner = instance.alternatives
-                    if Counter(winner) == Counter(self.outcome):
-                        explanation[nbExp] = [instance]
-                        normBasis[nbExp] = axiom
-                        nbExp += 1
-        
         posOutcomes = list(allSublists(self.profile[0]))
 
         # Delete target outcome from possible outcomes
         posOutcomes = removeOutcome(posOutcomes, self.outcome)
 
-        posExplanation = []
-        for axiom in axiomsAlternative:
-            instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
-            if instances:
-                for i in range(len(instances)):
-                    alternative = instances[i].alternatives
-                    lenBefore = len(posOutcomes)
-                    posOutcomes = [outcome for outcome in posOutcomes if alternative not in outcome]
-                    if len(posOutcomes) < lenBefore:
-                        posExplanation.append(instances[i])
-                if posOutcomes == []:
-                    explanation[nbExp] = posExplanation
-                    normBasis[nbExp] = axiom
-                    nbExp += 1
+        for axiom in normativeBasis:
+            if axiom.type == "outcome":
+                instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
+                if instances:
+                    for instance in instances:
+                        winner = instance.alternatives
+                        if Counter(winner) == Counter(self.outcome):
+                            explanation[nbExp] = [instance]
+                            normBasis[nbExp] = [axiom]
+                            nbExp += 1
+
+
+            posExplanation = []
+            if axiom.type == "delete alternative":
+                instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
+                if instances:
+                    for i in range(len(instances)):
+                        alternatives = instances[i].alternatives
+                        if len(alternatives) > 0:
+                            posOutcomes = [outcome for outcome in posOutcomes if any(alternatives) not in outcome]
+                            posExplanation.append(instances[i])
+
+
+            if axiom.type == "force alternative":
+                instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
+                if instances:
+                    for i in range(len(instances)):
+                        alternative = instances[i].alternatives
+                        if len(alternative) > 0:
+                            posOutcomes = [outcome for outcome in posOutcomes if alternative in outcome]
+                            posExplanation.append(instances[i])
+
+
+            if posOutcomes == [] and (axiom.type == "force alternative" or axiom.type == "delete alternative"):
+                print("posexpl", posExplanation)
+                # for instance in posExplanation:
+                explanation[nbExp] = [instance for instance in posExplanation]
+                normBasis[nbExp] = [instance.axiom for instance in posExplanation]
+                nbExp += 1
+                # print(explanation, normBasis)
+                # return explanation, normBasis
+
+
+
+            # else:
+            #     print("Axiom", axiom, "did not belong to any group")
+
+
+        # axiomsOutcome, axiomsAlternative = self.splitAxioms(normativeBasis)
+
+
+        # for axiom in axiomsOutcome:
+        #     instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
+        #     if instances:
+        #         for instance in instances:
+        #             winner = instance.alternatives
+        #             if Counter(winner) == Counter(self.outcome):
+        #                 explanation[nbExp] = [instance]
+        #                 normBasis[nbExp] = axiom
+        #                 nbExp += 1
+        
+
+
+        # posExplanation = []
+        # for axiom in axiomsAlternative:
+        #     instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
+        #     if instances:
+        #         for i in range(len(instances)):
+        #             alternative = instances[i].alternatives
+        #             lenBefore = len(posOutcomes)
+        #             posOutcomes = [outcome for outcome in posOutcomes if alternative not in outcome]
+        #             if len(posOutcomes) < lenBefore:
+        #                 posExplanation.append(instances[i])
+        #         if posOutcomes == []:
+        #             explanation[nbExp] = posExplanation
+        #             normBasis[nbExp] = axiom
+        #             nbExp += 1
+
         return explanation, normBasis
 
     # Spit normative basis
@@ -68,6 +120,7 @@ class FINDJUST:
                 axiomsAlternative.append(axiom)
         return axiomsOutcome, axiomsAlternative
 
+
     # Find all instances given a normative basis
     def getAllInstances(self, normativeBasis):
         allInstances = []
@@ -76,15 +129,18 @@ class FINDJUST:
         print(allInstances)
         return allInstances
 
+
     # Print explanation
     def printExplanation(self, exp, normBasis):
         print("+++++++++++++++++++++++++++++++++++++++++++++++")
         if not exp:
             print("No explanation found")
         else:
+            print(exp)
+            print(normBasis)
             for key in exp:
                 print("Found an explanation of size ", len(exp[key]), ":")
-                print("Normative basis : ", normBasis[key].description)
+                print("Normative basis : ", " ".join([exp.description for exp in normBasis[key]]))
                 for instance in exp[key]:
                     instance.toString()
                 print()
