@@ -23,7 +23,7 @@ class Cancellation:
                     xSkip += [x]
 
         if perfTie >= nbAlternatives:
-            instDescription = "There exists a perfect tie so all alternatives should win"
+            instDescription = "F(" + str(profile) + ") = X"
             return [instance(self, allAlternatives(nbAlternatives), instDescription)]
         return None
 

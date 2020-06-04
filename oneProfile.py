@@ -5,6 +5,7 @@ from condorcet import *
 from faithfulness import *
 from cancellation import *
 
+
 class FINDJUST:
 
     def __init__(self, profile, outcome):
@@ -19,12 +20,12 @@ class FINDJUST:
         print("............ Trying to find a justification .........")
         print("\t.... The target profile is: ", self.profile)
         print("\t.... The target outcome is: ", self.outcome)
-        print("\t.... The axioms in the normative basis are: ", ", ".join([axiom.toString() for axiom in normativeBasis]))
+        print("\t.... The axioms in the normative basis are: ", 
+                ", ".join([axiom.toString() for axiom in normativeBasis]))
         explanation, normBasis = {}, {}
         nbExp = 0
 
-        # allInstances = self.getAllInstances(normativeBasis)
-
+        # Create list of all possible outcomes
         posOutcomes = list(allSublists(self.profile[0]))
 
         # Delete target outcome from possible outcomes
@@ -36,99 +37,42 @@ class FINDJUST:
                 if instances:
                     for instance in instances:
                         winner = instance.alternatives
+                        # Check if winner is target outcome
                         if Counter(winner) == Counter(self.outcome):
                             explanation[nbExp] = [instance]
                             normBasis[nbExp] = [axiom]
                             nbExp += 1
-
 
             posExplanation = []
             if axiom.type == "delete alternative":
                 instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
                 if instances:
                     for i in range(len(instances)):
-                        alternatives = instances[i].alternatives
-                        if len(alternatives) > 0:
-                            posOutcomes = [outcome for outcome in posOutcomes if any(alternatives) not in outcome]
+                        delAlternatives = instances[i].alternatives
+                        if len(delAlternatives) > 0:
+                            # Delete outcomes that contain alternative
+                            posOutcomes = [outcome for outcome in posOutcomes 
+                                            if any(delAlternatives) not in outcome]
                             posExplanation.append(instances[i])
-
 
             if axiom.type == "force alternative":
                 instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
                 if instances:
                     for i in range(len(instances)):
-                        alternative = instances[i].alternatives
-                        if len(alternative) > 0:
-                            posOutcomes = [outcome for outcome in posOutcomes if alternative in outcome]
+                        forceAlternatives = instances[i].alternatives
+                        if len(forceAlternatives) > 0:
+                            # Delete outcomes that do not contain alternative
+                            posOutcomes = [outcome for outcome in posOutcomes 
+                                            if forceAlternatives in outcome]
                             posExplanation.append(instances[i])
 
-
-            if posOutcomes == [] and (axiom.type == "force alternative" or axiom.type == "delete alternative"):
-                print("posexpl", posExplanation)
-                # for instance in posExplanation:
+            if posOutcomes == [] and (axiom.type == "force alternative"
+                                        or axiom.type == "delete alternative"):
                 explanation[nbExp] = [instance for instance in posExplanation]
                 normBasis[nbExp] = [instance.axiom for instance in posExplanation]
                 nbExp += 1
-                # print(explanation, normBasis)
-                # return explanation, normBasis
-
-
-
-            # else:
-            #     print("Axiom", axiom, "did not belong to any group")
-
-
-        # axiomsOutcome, axiomsAlternative = self.splitAxioms(normativeBasis)
-
-
-        # for axiom in axiomsOutcome:
-        #     instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
-        #     if instances:
-        #         for instance in instances:
-        #             winner = instance.alternatives
-        #             if Counter(winner) == Counter(self.outcome):
-        #                 explanation[nbExp] = [instance]
-        #                 normBasis[nbExp] = axiom
-        #                 nbExp += 1
-        
-
-
-        # posExplanation = []
-        # for axiom in axiomsAlternative:
-        #     instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
-        #     if instances:
-        #         for i in range(len(instances)):
-        #             alternative = instances[i].alternatives
-        #             lenBefore = len(posOutcomes)
-        #             posOutcomes = [outcome for outcome in posOutcomes if alternative not in outcome]
-        #             if len(posOutcomes) < lenBefore:
-        #                 posExplanation.append(instances[i])
-        #         if posOutcomes == []:
-        #             explanation[nbExp] = posExplanation
-        #             normBasis[nbExp] = axiom
-        #             nbExp += 1
 
         return explanation, normBasis
-
-    # Spit normative basis
-    def splitAxioms(self, normativeBasis):
-        axiomsOutcome, axiomsAlternative = [], []
-        for axiom in normativeBasis:
-            if axiom.type == "outcome":
-                axiomsOutcome.append(axiom)
-            elif axiom.type == "alternative":
-                axiomsAlternative.append(axiom)
-        return axiomsOutcome, axiomsAlternative
-
-
-    # Find all instances given a normative basis
-    def getAllInstances(self, normativeBasis):
-        allInstances = []
-        for axiom in normativeBasis:
-            allInstances.append(axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters))
-        print(allInstances)
-        return allInstances
-
 
     # Print explanation
     def printExplanation(self, exp, normBasis):
@@ -136,11 +80,9 @@ class FINDJUST:
         if not exp:
             print("No explanation found")
         else:
-            print(exp)
-            print(normBasis)
             for key in exp:
                 print("Found an explanation of size ", len(exp[key]), ":")
-                print("Normative basis : ", " ".join([exp.description for exp in normBasis[key]]))
+                print("\t Normative basis : ", " ".join([exp.description for exp in normBasis[key]]))
                 for instance in exp[key]:
                     instance.toString()
                 print()
@@ -153,6 +95,6 @@ faith = Faithfulness()
 can = Cancellation()
 normativeBasis = [par, con, faith, can]
 
-thing = FINDJUST([[2,0,1], [2,1,0]], [2])
+thing = FINDJUST([[2,0,1]], [2])
 exp, normBasis = thing.solve(normativeBasis)
 thing.printExplanation(exp, normBasis)

@@ -7,6 +7,5 @@ class instance:
         self.alternatives = alternatives
         self.description = description
 
-
     def toString(self):
-        print(self.description + " (" + self.axiom.toString() + ") ")
+        print("\t", self.description + " (" + self.axiom.toString() + ") ")
