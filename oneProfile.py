@@ -18,9 +18,9 @@ class FINDJUST:
 
     def solve(self, normativeBasis):
         print("............ Trying to find a justification .........")
-        print("\t.... The target profile is: ", self.profile)
-        print("\t.... The target outcome is: ", self.outcome)
-        print("\t.... The axioms in the normative basis are: ", 
+        print("   .... The target profile is: ", self.profile)
+        print("   .... The target outcome is: ", self.outcome)
+        print("   .... The axioms in the normative basis are: ", 
                 ", ".join([axiom.toString() for axiom in normativeBasis]))
         explanation, normBasis = {}, {}
         nbExp = 0
@@ -52,7 +52,7 @@ class FINDJUST:
                         if len(delAlternatives) > 0:
                             # Delete outcomes that contain alternative
                             posOutcomes = [outcome for outcome in posOutcomes 
-                                            if any(delAlternatives) not in outcome]
+                                            if set(delAlternatives).isdisjoint(outcome)]
                             posExplanation.append(instances[i])
 
             if axiom.type == "force alternative":
@@ -63,7 +63,7 @@ class FINDJUST:
                         if len(forceAlternatives) > 0:
                             # Delete outcomes that do not contain alternative
                             posOutcomes = [outcome for outcome in posOutcomes 
-                                            if forceAlternatives in outcome]
+                                            if not set(delAlternatives).isdisjoint(outcome)]
                             posExplanation.append(instances[i])
 
             if posOutcomes == [] and (axiom.type == "force alternative"
@@ -82,7 +82,7 @@ class FINDJUST:
         else:
             for key in exp:
                 print("Found an explanation of size ", len(exp[key]), ":")
-                print("\t Normative basis : ", " ".join([exp.description for exp in normBasis[key]]))
+                print("\t Normative basis : ", ", ".join([exp.description for exp in normBasis[key]]))
                 for instance in exp[key]:
                     instance.toString()
                 print()
@@ -95,6 +95,6 @@ faith = Faithfulness()
 can = Cancellation()
 normativeBasis = [par, con, faith, can]
 
-thing = FINDJUST([[2,0,1]], [2])
+thing = FINDJUST([[2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5]], [2])
 exp, normBasis = thing.solve(normativeBasis)
 thing.printExplanation(exp, normBasis)
