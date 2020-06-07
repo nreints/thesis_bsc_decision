@@ -21,9 +21,9 @@ def prefers(i, x, y, profile):
 def alternatives(m, condition):
     return [x for x in allAlternatives(m) if condition(x)]
 
-# # Return voters that satisfy the condition
-# def voters(condition, n):
-#     return [i for i in allVoters(n) if condition(i)]
+# Return voters that satisfy the condition
+def voters(n, condition):
+    return [i for i in allVoters(n) if condition(i)]
 
 
 # Return all (non empty) sublists of list ## COPIED FROM BOIXEL AND ENDRISS
