@@ -6,7 +6,7 @@ from faithfulness import *
 from cancellation import *
 
 
-class FINDJUST:
+class FINDJUST1:
 
     def __init__(self, profile, outcome):
         self.profile = profile
@@ -95,6 +95,6 @@ faith = Faithfulness()
 can = Cancellation()
 normativeBasis = [par, con, faith, can]
 
-thing = FINDJUST([[2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5], [2,0,1,3,4,5]], [2])
+thing = FINDJUST1([[2,0,1,3,4,5], [2,0,1,3,4,5]], [2])
 exp, normBasis = thing.solve(normativeBasis)
 thing.printExplanation(exp, normBasis)
