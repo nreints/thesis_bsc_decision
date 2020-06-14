@@ -1,47 +1,53 @@
-from collections import Counter
-from helperFunctions import allSublists, allVoters, allAlternatives, removeOutcome
-from pareto import *
-from condorcet import *
-from faithfulness import *
-from cancellation import *
-from neutrality import *
-from anonymity import *
+from profile import *
+from node import *
+from pylgl import solve
+from collections import deque
+from atLeastOne import *
+from goalConstraint import *
+
+class findJUST2:
+    def __init__(self, targProfile, outcome):
+        self.targProfile = profile(targProfile)
+        self.targOutcome = outcome
 
 
-class FINDJUST2:
-    
-    def __init__(self, profile, outcome):
-        self.profile = profile
-        self.outcome = outcome
-        self.nbAlternatives = len(profile[0])
-        self.nbVoters = len(profile)
-        self.alternatives = allAlternatives(self.nbAlternatives)
-        self.voters = allVoters(self.nbVoters)
-
-
-    def solve(self, normativeBasis):
+    def solve2(self, normativeBasis):
         print("............ Trying to find a justification .........")
-        print("   .... The target profile is: ", self.profile)
-        print("   .... The target outcome is: ", self.outcome)
+        print("   .... The target profile is: ", self.targProfile.toString())
+        print("   .... The target outcome is: ", self.targOutcome)
         print("   .... The axioms in the normative basis are: ", 
                 ", ".join([axiom.toString() for axiom in normativeBasis]))
-        explanation, normBasis = {}, {}
-        nbExp = 0
-        for axiom in normativeBasis:
-            instance = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
-            # print(axiom, instance)
+        one = atLeastOne()
+        goal = goalConstraint()
+        explanation = {one.getInstancesCNF(self.targProfile), goal.getInstancesCNF(self.targProfile)}
+        normBasis = {}
 
-        return 0, 0
+        usedProfiles = [self.targProfile]
+
+        root = node(usedProfiles, explanation, normBasis)
+        root.setDiscovered()
+
+        queue = [root]
+        while queue != []:
+            currentNode = queue[0]
+            if solve(currentNode.getExp()) == "UNSAT":
+                return currentNode.getExp(), currentNode.getNormBasis()
+
+            for axiom in normativeBasis:
+                for currentProfile in currentNode.getProfiles():
+                    for instance in axiom.getInstancesCNF(currentProfile):
+                        usedProfiles = currentNode.getProfiles().append(currentProfile)
+                        tempExplanation = currentNode.getExp().append(instance) + [one.getInstancesCNF(prof) for prof in usedProfiles]
+                        tempNormBasis = currentNode.getNormBasis().append(axiom)
+                        nextNode = node(usedProfiles, tempExplanation, tempNormBasis)
+
+                        if nextNode.discovered == False:
+                            nextNode.setDiscovered()
+                            queue.append(nextNode)
+            queue.pop(0)
+
+        return None, None
 
 
-par = ParetoAxiom()
-con = CondorcetAxiom()
-faith = Faithfulness()
-can = Cancellation()
-neu = Neutrality()
-ano = Anonymity()
-normativeBasis = [par, con, faith, can, neu, ano]
-
-thing = FINDJUST2([[2,0,1], [0,2,1], [1,2,0], [0,1,2]], [2])
-exp, normBasis = thing.solve(normativeBasis)
-# thing.printExplanation(exp, normBasis)
+thing2 = findJUST2([[1,0,2], [1,0,2]], [1])
+thing2.solve2(["bla"])

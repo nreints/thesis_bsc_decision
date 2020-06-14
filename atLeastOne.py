@@ -1,8 +1,8 @@
 
 
-class anonymity():
+class atLeastOne():
     def __init__(self):
-        self.description = "anonymity"
+        self.description = "at least one"
 
     def getInstancesCNF(self, profile):
         instances = []

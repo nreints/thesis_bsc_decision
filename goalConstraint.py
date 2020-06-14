@@ -1,8 +1,8 @@
 
 
-class anonymity():
+class goalConstraint():
     def __init__(self):
-        self.description = "anonymity"
+        self.description = "goal constraint"
 
     def getInstancesCNF(self, profile):
         instances = []
