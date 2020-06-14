@@ -6,7 +6,7 @@ class ParetoAxiom:
 
     def __init__(self):
         self.description = "Pareto Principle"
-        self.type = "delete alternative"
+        self.type = "delete alt"
 
     # Get instances
     def getInstances(self, profile, nbAlternatives, nbVoters):
@@ -22,6 +22,9 @@ class ParetoAxiom:
                     instDescription = str(y) + " not in F(" + str(profile) + ") dominated by " + str(x)
                     inst += [instance(self, [y], instDescription)]
         return inst
+
+    def getType(self):
+        return self.type
 
     def toString(self):
         return self.description

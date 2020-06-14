@@ -27,5 +27,8 @@ class Cancellation:
             return [instance(self, allAlternatives(nbAlternatives), instDescription)]
         return None
 
+    def getType(self):
+        return self.type
+
     def toString(self):
         return self.description

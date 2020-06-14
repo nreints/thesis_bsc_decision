@@ -15,5 +15,8 @@ class Faithfulness:
             return [instance(self, [winner], instDescription)]
         return None
 
+    def getType(self):
+        return self.type
+
     def toString(self):
         return self.description

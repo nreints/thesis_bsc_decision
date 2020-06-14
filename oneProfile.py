@@ -32,11 +32,11 @@ class FINDJUST1:
         posOutcomes = removeOutcome(posOutcomes, self.outcome)
 
         for axiom in normativeBasis:
-            if axiom.type == "outcome":
+            if axiom.getType() == "outcome":
                 instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
                 if instances:
                     for instance in instances:
-                        winner = instance.alternatives
+                        winner = instance.getAlternatives()
                         # Check if winner is target outcome
                         if Counter(winner) == Counter(self.outcome):
                             explanation[nbExp] = [instance]
@@ -44,32 +44,32 @@ class FINDJUST1:
                             nbExp += 1
 
             posExplanation = []
-            if axiom.type == "delete alternative":
+            if axiom.getType() == "delete alt":
                 instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
                 if instances:
-                    for i in range(len(instances)):
-                        delAlternatives = instances[i].alternatives
+                    for instance in instances:
+                        delAlternatives = instance.getAlternatives()
                         if len(delAlternatives) > 0:
                             # Delete outcomes that contain alternative
                             posOutcomes = [outcome for outcome in posOutcomes 
                                             if set(delAlternatives).isdisjoint(outcome)]
-                            posExplanation.append(instances[i])
+                            posExplanation.append(instance)
 
-            if axiom.type == "force alternative":
+            if axiom.getType() == "force alt":
                 instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
                 if instances:
-                    for i in range(len(instances)):
-                        forceAlternatives = instances[i].alternatives
+                    for instance in instances:
+                        forceAlternatives = instance.getAlternatives()
                         if len(forceAlternatives) > 0:
                             # Delete outcomes that do not contain alternative
                             posOutcomes = [outcome for outcome in posOutcomes 
                                             if not set(delAlternatives).isdisjoint(outcome)]
-                            posExplanation.append(instances[i])
+                            posExplanation.append(instance)
 
-            if posOutcomes == [] and (axiom.type == "force alternative"
-                                        or axiom.type == "delete alternative"):
+            if posOutcomes == [] and (axiom.getType() == "force alt"
+                                        or axiom.getType() == "delete alt"):
                 explanation[nbExp] = [instance for instance in posExplanation]
-                normBasis[nbExp] = [instance.axiom for instance in posExplanation]
+                normBasis[nbExp] = [instance.getAxiom() for instance in posExplanation]
                 nbExp += 1
 
         return explanation, normBasis
@@ -95,6 +95,6 @@ faith = Faithfulness()
 can = Cancellation()
 normativeBasis = [par, con, faith, can]
 
-thing = FINDJUST1([[2,0,1,3,4,5], [2,0,1,3,4,5]], [2])
+thing = FINDJUST1([[2,0,1], [1,0,2], [2,1,0]], [2])
 exp, normBasis = thing.solve(normativeBasis)
 thing.printExplanation(exp, normBasis)
