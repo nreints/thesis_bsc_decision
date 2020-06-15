@@ -1,5 +1,6 @@
-from helperFunctions import alternatives, allAlternatives, prefers, allVoters
+from helperFunctions import alternatives, allAlternatives, prefers, prefers2, allVoters, posLiteral, negLiteral
 from instance import *
+from instanceCNF import *
 
 class CondorcetAxiom:
 
@@ -22,6 +23,24 @@ class CondorcetAxiom:
                 instDescription = "F(" + str(profile) + ") = {" + str(x) + "}"
                 return [instance(self, [x], instDescription)]
         return None
+
+    def getInstancesCNF(self, profile):
+        for x in allAlternatives(profile.nbAlternatives):
+            timesY = 0
+            for y in alternatives(profile.nbAlternatives, lambda y: x != y):
+                voters = 0
+                for i in allVoters(profile.nbVoters):
+                    if prefers2(i, x, y, profile.id, profile.nbAlternatives):
+                        voters += 1
+                if voters > (profile.nbVoters/2):
+                    timesY += 1
+            if timesY == profile.nbAlternatives - 1:
+                instCNF = [[posLiteral(profile.id, x, profile.nbAlternatives)]]
+                instCNF += [[negLiteral(profile.id, y, profile.nbAlternatives) for y in alternatives(profile.nbAlternatives, lambda y: x != y)]]
+                instDescription = "F(" + str(profile) + ") = {" + str(x) + "}"
+                print("CON", instCNF)
+                return [instanceCNF(self, instCNF, instDescription)]
+        return []
 
     def getType(self):
         return self.type
