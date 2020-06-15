@@ -54,3 +54,23 @@ def listAllProfiles(profile):
         for sub2 in list(permutations(range(len(profile[0])))):
             allProf += [[list(sub1), list(sub2)]]
     return allProf
+
+def isDominated(x, profile):
+    nbAlternatives = profile.nbAlternatives
+    nbVoters = profile.nbVoters
+    for y in allAlternatives(nbAlternatives):
+        dominated = 0
+        for i in allVoters(nbVoters):
+            if prefers(i, y, x, profile.listProfile):
+                dominated += 1
+        if dominated == nbVoters:
+            return y
+    return -1
+    
+
+def posLiteral(r, x, m):
+    print
+    return r * m + x + 1
+
+def negLiteral(r, x, m):
+    return (-1) * posLiteral(r, x, m)

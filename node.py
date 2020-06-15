@@ -10,6 +10,13 @@ class node:
     def setDiscovered(self):
         self.discovered = True
 
+    def getExpCNF(self):
+        res = []
+        for i in range(len(self.explanation)):
+            res.append(self.explanation[i].cnf)
+        # print("\t", res)
+        return res
+
     def getExp(self):
         return self.explanation
 

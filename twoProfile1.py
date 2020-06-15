@@ -4,6 +4,7 @@ from pylgl import solve
 from collections import deque
 from atLeastOne import *
 from goalConstraint import *
+from pareto import *
 
 class findJUST2:
     def __init__(self, targProfile, outcome):
@@ -18,9 +19,11 @@ class findJUST2:
         print("   .... The axioms in the normative basis are: ", 
                 ", ".join([axiom.toString() for axiom in normativeBasis]))
         one = atLeastOne()
+        oneTarg = one.getInstancesCNF(self.targProfile)
         goal = goalConstraint()
-        explanation = {one.getInstancesCNF(self.targProfile), goal.getInstancesCNF(self.targProfile)}
-        normBasis = {}
+        goalTarg = goal.getInstancesCNF(self.targProfile, self.targOutcome)
+        explanation = [oneTarg, goalTarg]
+        normBasis = []
 
         usedProfiles = [self.targProfile]
 
@@ -28,26 +31,57 @@ class findJUST2:
         root.setDiscovered()
 
         queue = [root]
+        # for n in queue:
+        #     for prof in n.getProfiles():
+        #         print("beforreee prof ", prof.listProfile)
+
         while queue != []:
             currentNode = queue[0]
-            if solve(currentNode.getExp()) == "UNSAT":
+            # print("now checking exp", currentNode.getProfiles()[0].listProfile, "++ CNF", currentNode.getExp())
+            if solve(currentNode.getExpCNF()) == "UNSAT":
                 return currentNode.getExp(), currentNode.getNormBasis()
+            # print("satisfiable", solve(currentNode.getExpCNF()))
 
             for axiom in normativeBasis:
                 for currentProfile in currentNode.getProfiles():
                     for instance in axiom.getInstancesCNF(currentProfile):
-                        usedProfiles = currentNode.getProfiles().append(currentProfile)
-                        tempExplanation = currentNode.getExp().append(instance) + [one.getInstancesCNF(prof) for prof in usedProfiles]
-                        tempNormBasis = currentNode.getNormBasis().append(axiom)
-                        nextNode = node(usedProfiles, tempExplanation, tempNormBasis)
+                        # print(instance.description, " ".join([currentNode.explanation[i].description for i in range(len(currentNode.explanation))]))
+                        # print(instance.description in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))])
+                        if instance.description not in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))]:
+                            usedProfiles = list(set(currentNode.getProfiles() + [currentProfile]))
+                            tempExplanation = currentNode.getExp() + [instance] + [one.getInstancesCNF(prof) for prof in usedProfiles if prof not in currentNode.getProfiles()]
+                            tempNormBasis = currentNode.getNormBasis() + [axiom]
+                            # print("Creating new node ")
+                            # print("\t used prof : ", usedProfiles)
+                            # print("\t exp : ", " ".join([tempExplanation[i].axiom.toString() for i in range(len(tempExplanation))]))
+                            # print("\t exp : ", " ".join([str(tempExplanation[i].cnf) for i in range(len(tempExplanation))]))
+                            # print("\t nom : ", tempNormBasis)
+                            nextNode = node(usedProfiles, tempExplanation, tempNormBasis)
 
-                        if nextNode.discovered == False:
-                            nextNode.setDiscovered()
-                            queue.append(nextNode)
+                            if nextNode.discovered == False:
+                                nextNode.setDiscovered()
+                                queue.append(nextNode)
+            # print(len(queue))
+            # for n in queue:
+            #     print("newNode")
+            #     for prof in n.getProfiles():
+            #         print(prof.listProfile)
             queue.pop(0)
+            # for n in queue:
+            #     print("newNode")
+            #     for prof in n.getProfiles():
+            #         print(prof.listProfile)
+            # print(len(queue))
 
         return None, None
 
 
-thing2 = findJUST2([[1,0,2], [1,0,2]], [1])
-thing2.solve2([".."])
+par = ParetoAxiom()
+thing2 = findJUST2([[0,1,2], [0,1,2]], [0])
+exp, norm = thing2.solve2([par])
+
+print("++++ DONEE ++++")
+for instance in exp:
+    print(instance.toString())
+
+

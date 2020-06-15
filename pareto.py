@@ -1,6 +1,6 @@
-from helperFunctions import alternatives, allVoters, allAlternatives, prefers
+from helperFunctions import alternatives, allVoters, allAlternatives, prefers, negLiteral, isDominated
 from instance import *
-
+from instanceCNF import *
 
 class ParetoAxiom:
 
@@ -22,6 +22,17 @@ class ParetoAxiom:
                     instDescription = str(y) + " not in F(" + str(profile) + ") dominated by " + str(x)
                     inst += [instance(self, [y], instDescription)]
         return inst
+
+    def getInstancesCNF(self, profile):
+        instances = []
+        for y in allAlternatives(profile.nbAlternatives):
+            x = isDominated(y, profile)
+            if x >= 0:
+                cnfInstance = [negLiteral(profile.id, y, profile.nbAlternatives)]
+                instDescription = str(y) + " not in F(" + profile.toString() + ") dominated by " + str(x)
+                instances += [instanceCNF(self, cnfInstance, instDescription)]
+        return instances
+
 
     def getType(self):
         return self.type
