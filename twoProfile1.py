@@ -1,7 +1,6 @@
 from profile import *
 from node import *
 from pylgl import solve
-from collections import deque
 from atLeastOne import *
 from goalConstraint import *
 from pareto import *
@@ -83,8 +82,8 @@ class findJUST2:
 par = ParetoAxiom()
 con = CondorcetAxiom()
 can = Cancellation()
-thing2 = findJUST2([[2,1,0], [2,1,0]], [0])
-exp, norm = thing2.solve2([par,con])
+thing2 = findJUST2([[1,0,2], [1,0,2]], [1])
+exp, norm = thing2.solve2([par, con, can])
 
 print("++++ DONEE ++++")
 if exp:

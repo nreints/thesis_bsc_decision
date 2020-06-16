@@ -1,4 +1,4 @@
-from helperFunctions import alternatives, allVoters, allAlternatives, prefers2, posLiteral
+from helperFunctions import alternatives, allVoters, allAlternatives, prefers, prefers2, posLiteral
 from instance import *
 from instanceCNF import *
 
@@ -45,7 +45,7 @@ class Cancellation:
 
         if perfTie >= profile.nbAlternatives:
             instCNF = [[posLiteral(profile.id, x, profile.nbAlternatives)] for x in allAlternatives(profile.nbAlternatives)]
-            instDescription = "F(" + str(profile) + ") = X"
+            instDescription = "F(" + profile.toString() + ") = X"
             return [instanceCNF(self, instCNF, instDescription)]
         return []
 
