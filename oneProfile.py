@@ -95,6 +95,6 @@ faith = Faithfulness()
 can = Cancellation()
 normativeBasis = [par, con, faith, can]
 
-thing = FINDJUST1([[2,0,1], [1,0,2], [2,1,0]], [2])
+thing = FINDJUST1([[2,0,1]], [2])
 exp, normBasis = thing.solve(normativeBasis)
 thing.printExplanation(exp, normBasis)

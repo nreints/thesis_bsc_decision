@@ -12,8 +12,8 @@ class goalConstraint():
         for x in alternatives(profile.nbAlternatives, lambda x: x not in outcome):
             instCNF.append(posLiteral(profile.id, x, profile.nbAlternatives))
         instDescription = "F(" + profile.toString() + ") != " + str(outcome)
-        instances = instanceCNF(self, instCNF, instDescription)
-        # print("goal", instCNF)
+        instances = instanceCNF(self, [instCNF], instDescription)
+        print("goal", [instCNF])
         return instances
 
     def toString(self):

@@ -13,7 +13,7 @@ class Faithfulness:
             instDescription = "F(" + str(profile) + ") = {" + str(profile[0][0]) + "}"
             winner = topAlternative(profile[0])
             return [instance(self, [winner], instDescription)]
-        return None
+        return []
 
     def getType(self):
         return self.type

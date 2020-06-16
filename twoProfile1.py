@@ -6,6 +6,7 @@ from atLeastOne import *
 from goalConstraint import *
 from pareto import *
 from condorcet import *
+from cancellation import *
 
 class findJUST2:
     def __init__(self, targProfile, outcome):
@@ -32,28 +33,32 @@ class findJUST2:
         root.setDiscovered()
 
         queue = [root]
-
         while queue != []:
             currentNode = queue[0]
-            print("now checking exp", currentNode.getProfiles()[0].listProfile, "++ CNF", currentNode.getExpCNF())
-            if solve(currentNode.getExpCNF()) == "UNSAT":
+            currentCNF = currentNode.getExpCNF()
+
+            print("now checking exp", currentNode.getProfiles()[0].listProfile, "++ CNF", currentCNF)
+            if solve(currentCNF) == "UNSAT":
                 return currentNode.getExp(), currentNode.getNormBasis()
             # print("satisfiable", solve(currentNode.getExpCNF()))
 
             for axiom in normativeBasis:
+                print("for axiom ", axiom)
                 for currentProfile in currentNode.getProfiles():
+                    print("\t",currentProfile)
                     for instance in axiom.getInstancesCNF(currentProfile):
+                        print("\t\t",instance)
                         # print(instance.description, " ".join([currentNode.explanation[i].description for i in range(len(currentNode.explanation))]))
                         # print(instance.description in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))])
                         if instance.description not in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))]:
                             usedProfiles = list(set(currentNode.getProfiles() + [currentProfile]))
                             tempExplanation = currentNode.getExp() + [instance] + [one.getInstancesCNF(prof) for prof in usedProfiles if prof not in currentNode.getProfiles()]
                             tempNormBasis = currentNode.getNormBasis() + [axiom]
-                            print("Creating new node ")
-                            print("\t used prof : ", usedProfiles)
-                            print("\t exp : ", " ".join([tempExplanation[i].axiom.toString() for i in range(len(tempExplanation))]))
-                            print("\t exp : ", " ".join([str(tempExplanation[i].cnf) for i in range(len(tempExplanation))]))
-                            print("\t nom : ", tempNormBasis)
+                            print("\t\t\tCreating new node ")
+                            print("\t\t\t+ used prof : ", usedProfiles)
+                            print("\t\t\t+ exp : ", " ".join([tempExplanation[i].axiom.toString() for i in range(len(tempExplanation))]))
+                            print("\t\t\t+ exp : ", " ".join([str(tempExplanation[i].cnf) for i in range(len(tempExplanation))]))
+                            # print("\t\t\t+ nom : ", tempNormBasis)
                             nextNode = node(usedProfiles, tempExplanation, tempNormBasis)
 
                             if nextNode.discovered == False:
@@ -77,8 +82,9 @@ class findJUST2:
 
 par = ParetoAxiom()
 con = CondorcetAxiom()
-thing2 = findJUST2([[1,2,0], [1,2,0]], [1])
-exp, norm = thing2.solve2([par])
+can = Cancellation()
+thing2 = findJUST2([[2,1,0], [2,1,0]], [0])
+exp, norm = thing2.solve2([par,con])
 
 print("++++ DONEE ++++")
 if exp:

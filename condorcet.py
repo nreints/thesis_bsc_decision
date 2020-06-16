@@ -36,9 +36,9 @@ class CondorcetAxiom:
                     timesY += 1
             if timesY == profile.nbAlternatives - 1:
                 instCNF = [[posLiteral(profile.id, x, profile.nbAlternatives)]]
-                instCNF += [[negLiteral(profile.id, y, profile.nbAlternatives) for y in alternatives(profile.nbAlternatives, lambda y: x != y)]]
-                instDescription = "F(" + str(profile) + ") = {" + str(x) + "}"
-                print("CON", instCNF)
+                instCNF += [[negLiteral(profile.id, y, profile.nbAlternatives)] for y in alternatives(profile.nbAlternatives, lambda y: x != y)]
+                instDescription = "F(" + profile.toString() + ") = {" + str(x) + "}"
+                # print("CON", instCNF)
                 return [instanceCNF(self, instCNF, instDescription)]
         return []
 

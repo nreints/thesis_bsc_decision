@@ -17,6 +17,18 @@ def allAlternatives(m):
 def prefers(i, x, y, profile):
     return profile[i].index(x) < profile[i].index(y)
 
+def preference(i, r, m):
+    base = factorial(m)
+    return ( r % (base ** (i+1)) ) // (base ** i)
+
+
+def preflist(i, r, m):
+    preflists = list(permutations(allAlternatives(m)))
+    return preflists[preference(i, r, m)]
+
+def prefers2(i, x, y, r, m):
+    prefList = preflist(i, r, m)
+    return prefList.index(x) < prefList.index(y)
 
 # Return alternatives that satisfy the condition
 def alternatives(m, condition):
@@ -69,7 +81,6 @@ def isDominated(x, profile):
     
 
 def posLiteral(r, x, m):
-    print
     return r * m + x + 1
 
 def negLiteral(r, x, m):

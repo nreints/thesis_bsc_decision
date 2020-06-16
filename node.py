@@ -12,9 +12,10 @@ class node:
 
     def getExpCNF(self):
         res = []
-        for i in range(len(self.explanation)):
-            res.append(self.explanation[i].cnf)
-        # print("\t", res)
+        for explanation in self.explanation:
+            for subCNF in explanation.cnf:
+                # print("\t\t", subCNF)
+                res += [subCNF]
         return res
 
     def getExp(self):

@@ -6,7 +6,7 @@ class atLeastOne():
         self.description = "at least one"
 
     def getInstancesCNF(self, profile):
-        instCNF = [posLiteral(profile.id, x, profile.nbAlternatives) for x in allAlternatives(profile.nbVoters)]
+        instCNF = [[posLiteral(profile.id, x, profile.nbAlternatives) for x in allAlternatives(profile.nbVoters)]]
         # print("atleast1", instCNF)
         instDescription = "F(" + profile.toString() + ") != {}"
         instance = instanceCNF(self, instCNF, instDescription)
