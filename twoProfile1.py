@@ -6,6 +6,7 @@ from goalConstraint import *
 from pareto import *
 from condorcet import *
 from cancellation import *
+from faithfulness import *
 
 class findJUST2:
     def __init__(self, targProfile, outcome):
@@ -64,11 +65,6 @@ class findJUST2:
                                 nextNode.setDiscovered()
                                 queue.append(nextNode)
             print("NEW")
-            # print(len(queue))
-            # for n in queue:
-            #     print("newNode")
-            #     for prof in n.getProfiles():
-            #         print(prof.listProfile)
             queue.pop(0)
             # for n in queue:
             #     print("newNode")
@@ -82,6 +78,7 @@ class findJUST2:
 par = ParetoAxiom()
 con = CondorcetAxiom()
 can = Cancellation()
+faith = Faithfulness()
 thing2 = findJUST2([[1,0,2], [1,0,2]], [1])
 exp, norm = thing2.solve2([par, con, can])
 
