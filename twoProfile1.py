@@ -8,6 +8,7 @@ from condorcet import *
 from cancellation import *
 from faithfulness import *
 from anonymity1 import *
+from neutrality1 import *
 
 class findJUST2:
     def __init__(self, targProfile, outcome):
@@ -40,34 +41,34 @@ class findJUST2:
             currentNode = queue[0]
             currentCNF = currentNode.getExpCNF()
 
-            print("now checking exp", currentNode.getProfiles()[0].listProfile, "++ CNF", currentCNF)
+            # print("now checking exp", currentNode.getProfiles()[0].listProfile, "++ CNF", currentCNF)
             if solve(currentCNF) == "UNSAT":
                 return currentNode.getExp(), currentNode.getNormBasis()
 
             for axiom in normativeBasis:
-                print("for axiom ", axiom)
+                # print("for axiom ", axiom)
                 for currentProfile in currentNode.getProfiles():
-                    print("\t",currentProfile)
+                    # print("\t",currentProfile)
                     for instance in axiom.getInstancesCNF(currentProfile):
-                        print("\t\t",instance)
+                        # print("\t\t",instance)
                         # print(instance.description, " ".join([currentNode.explanation[i].description for i in range(len(currentNode.explanation))]))
                         # print(instance.description in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))])
                         if instance.description not in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))]:
                             usedProfiles = list(set(currentNode.getProfiles() + [currentProfile]))
                             tempExplanation = currentNode.getExp() + [instance] + [one.getInstancesCNF(prof) for prof in usedProfiles if prof not in currentNode.getProfiles()]
                             tempNormBasis = currentNode.getNormBasis() + [axiom]
-                            print("\t\t\tCreating new node ")
-                            print("\t\t\t+ used prof : ", usedProfiles)
-                            print("\t\t\t+ temexp : ", " ".join([str(tempExplanation[i]) for i in range(len(tempExplanation))]))
-                            print("\t\t\t+ exp : ", " ".join([str(tempExplanation[i].axiom) for i in range(len(tempExplanation))]))
-                            print("\t\t\t+ exp : ", " ".join([str(tempExplanation[i].cnf) for i in range(len(tempExplanation))]))
+                            # print("\t\t\tCreating new node ")
+                            # print("\t\t\t+ used prof : ", usedProfiles)
+                            # print("\t\t\t+ temexp : ", " ".join([str(tempExplanation[i]) for i in range(len(tempExplanation))]))
+                            # print("\t\t\t+ exp : ", " ".join([str(tempExplanation[i].axiom) for i in range(len(tempExplanation))]))
+                            # print("\t\t\t+ exp : ", " ".join([str(tempExplanation[i].cnf) for i in range(len(tempExplanation))]))
                             nextNode = node(usedProfiles, tempExplanation, tempNormBasis)
 
                             if nextNode.discovered == False:
                                 nextNode.setDiscovered()
                                 queue.append(nextNode)
 
-            print("NEW")
+            # print("NEW")
             queue.pop(0)
             # for n in queue:
             #     print("newNode")
@@ -104,9 +105,10 @@ con = CondorcetAxiom()
 can = Cancellation()
 faith = Faithfulness()
 ano = Anonymity()
+neu = Neutrality()
 
-thing2 = findJUST2([[0,1,2], [1,0,2]], [0,1])
-exp, norm = thing2.solve2([ano, par])
+thing2 = findJUST2([[0,1,2], [1,0,2]], [0,1 ])
+exp, norm = thing2.solve2([con, can, faith, neu, ano, par])
 thing2.printExplanation(exp, norm)
 
 

@@ -30,7 +30,7 @@ class Anonymity():
             if Counter(l1) == Counter(l2):
                 cnfInstance = [[negLiteral(profile.id, x, profile.nbAlternatives), posLiteral(i, x, profile.nbAlternatives)] for x in allAlternatives(profile.nbAlternatives)]
                 cnfInstance += [[negLiteral(i, x, profile.nbAlternatives), posLiteral(profile.id, x, profile.nbAlternatives)] for x in allAlternatives(profile.nbAlternatives)]
-                instDescription = "F(" + profile.toString() + ") = F(" + str(i) + ")"
+                instDescription = "F(" + profile.toString() + ") = F(" + str(allProfiles[i]) + ")"
                 instance = instanceCNF(self, cnfInstance, instDescription)
                 instances.append(instance)
         return instances
