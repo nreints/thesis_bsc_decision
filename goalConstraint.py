@@ -13,7 +13,6 @@ class goalConstraint():
             instCNF.append(posLiteral(profile.id, x, profile.nbAlternatives))
         instDescription = "F(" + profile.toString() + ") != " + str(outcome)
         instances = instanceCNF(self, [instCNF], instDescription)
-        print("goal", [instCNF])
         return instances
 
     def toString(self):
