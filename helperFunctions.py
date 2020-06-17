@@ -12,6 +12,9 @@ def allVoters(n):
 def allAlternatives(m):
     return range(m)
 
+def allProfilesNumber(m, n):
+    return range(factorial(m) ** n)
+
 
 # Return True if voter i prefers x over y, else False
 def prefers(i, x, y, profile):
@@ -38,6 +41,8 @@ def alternatives(m, condition):
 def voters(n, condition):
     return [i for i in allVoters(n) if condition(i)]
 
+def profiles(m, n, condition):
+    return [i for i in allProfiles(m, n) if condition(i)]
 
 # Return all (non empty) sublists of list ## Copied from Boixel and Endriss
 def allSublists(list):
@@ -60,25 +65,6 @@ def topAlternative(profile):
 def allProfiles(m, n):
     return range(factorial(m) ** n)
 
-# def listAllProfiles(profile):
-    # a = list(permutations(profile[0]))
-    # mult = a * len(profile)
-    # res = []
-    # for r in product(a, mult):
-    #     res += [[list(r[i]) for i in range(len(profile))]]
-    #     # res += [[list(r[0])] + [list(r[1])]]
-    # print(len(res), res)
-    # half = int(len(res)/2)
-    # print(res.index(profile))
-    # print(len(res[:half]), res[:half])
-    # return res[:half]
-
-
-    # allProf = []
-    # for sub1 in list(permutations(range(len(profile[0])))):
-    #     for sub2 in list(permutations(range(len(profile[0])))):
-    #         allProf += [[list(sub1), list(sub2)]]
-    # return allProf
 
 def isDominated(x, profile):
     nbAlternatives = profile.nbAlternatives
@@ -98,3 +84,7 @@ def posLiteral(r, x, m):
 
 def negLiteral(r, x, m):
     return (-1) * posLiteral(r, x, m)
+
+
+def iVariants(i, r1, r2, m):
+    return all(preference(j,r1, m) == preference(j,r2, m) for j in voters(m, lambda j : j != i))
