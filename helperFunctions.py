@@ -1,4 +1,4 @@
-from itertools import combinations, permutations, chain
+from itertools import combinations, permutations, chain, product
 from math import factorial
 from collections import Counter
 
@@ -60,12 +60,25 @@ def topAlternative(profile):
 def allProfiles(m, n):
     return range(factorial(m) ** n)
 
-def listAllProfiles(profile):
-    allProf = []
-    for sub1 in list(permutations(range(len(profile[0])))):
-        for sub2 in list(permutations(range(len(profile[0])))):
-            allProf += [[list(sub1), list(sub2)]]
-    return allProf
+# def listAllProfiles(profile):
+    # a = list(permutations(profile[0]))
+    # mult = a * len(profile)
+    # res = []
+    # for r in product(a, mult):
+    #     res += [[list(r[i]) for i in range(len(profile))]]
+    #     # res += [[list(r[0])] + [list(r[1])]]
+    # print(len(res), res)
+    # half = int(len(res)/2)
+    # print(res.index(profile))
+    # print(len(res[:half]), res[:half])
+    # return res[:half]
+
+
+    # allProf = []
+    # for sub1 in list(permutations(range(len(profile[0])))):
+    #     for sub2 in list(permutations(range(len(profile[0])))):
+    #         allProf += [[list(sub1), list(sub2)]]
+    # return allProf
 
 def isDominated(x, profile):
     nbAlternatives = profile.nbAlternatives

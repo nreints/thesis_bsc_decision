@@ -1,10 +1,12 @@
-from helperFunctions import listAllProfiles
+from itertools import permutations, product
+import numpy as np
 
 class profile:
 
-    def __init__(self, listProfile):
+    def __init__(self, listProfile, allProfiles):
         self.listProfile = listProfile
-        self.id = listAllProfiles(listProfile).index(listProfile)
+        # self.id = 2
+        self.id = allProfiles.index(listProfile)
         self.nbVoters = len(listProfile)
         self.nbAlternatives = len(listProfile[0])
 
