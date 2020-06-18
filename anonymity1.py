@@ -9,8 +9,6 @@ class Anonymity():
         self.description = "anonymity"
 
     def getInstancesCNF(self, prof):
-        
-        
         start = [sorted(prof.listProfile[0]) for _ in range(prof.nbVoters)]
         results = product(*[list(permutations(x)) for x in start])
         allProfiles = []
@@ -21,9 +19,7 @@ class Anonymity():
         
         instances = []
         for i in profiles(prof.nbAlternatives, prof.nbVoters, lambda i: i != prof.id):
-            # if iVariants(0, profile.id, i, profile.nbAlternatives):
-            #     print(allProfiles[i], profile.listProfile)
-            
+
             if i <= prof.id:
                 continue
             l1 = [str(sub) for sub in prof.listProfile]

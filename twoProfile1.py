@@ -24,7 +24,7 @@ class findJUST2:
         print("   .... The target outcome is: ", self.targOutcome)
         print("   .... The axioms in the normative basis are: ", 
                 ", ".join([axiom.toString() for axiom in normativeBasis]))
-        
+        l = 0
         one = atLeastOne()
         oneTarg = one.getInstancesCNF(self.targProfile)
         goal = goalConstraint()
@@ -44,6 +44,7 @@ class findJUST2:
 
             # print("now checking exp", currentNode.getProfiles()[0].listProfile, "++ CNF", currentCNF)
             if solve(currentCNF) == "UNSAT":
+                print(l)
                 return currentNode.getExp(), currentNode.getNormBasis()
 
             for axiom in normativeBasis:
@@ -51,25 +52,13 @@ class findJUST2:
                 for currentProfile in currentNode.getProfiles():
                     # print("\t",currentProfile)
                     for instance in axiom.getInstancesCNF(currentProfile):
-                        # print("\t\t",instance)
-                        # print(instance.description, " ".join([currentNode.explanation[i].description for i in range(len(currentNode.explanation))]))
-                        # print(instance.description in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))])
-                        if instance.description not in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))]:
-                            # print(currentNode.getProfiles() + [instance.getProfile()])
-                            usedProfiles = list(set(currentNode.getProfiles() + [instance.getProfile()]))
-                            tempExplanation = currentNode.getExp() + [instance] + [one.getInstancesCNF(prof) for prof in usedProfiles if prof not in currentNode.getProfiles()]
-                            tempNormBasis = currentNode.getNormBasis() + [axiom]
-                            # print("\t\t\tCreating new node ")
-                            # print("\t\t\t+ used prof : ", usedProfiles)
-                            # print("\t\t\t+ temexp : ", " ".join([str(tempExplanation[i]) for i in range(len(tempExplanation))]))
-                            # print("\t\t\t+ exp : ", " ".join([str(tempExplanation[i].axiom) for i in range(len(tempExplanation))]))
-                            # print("\t\t\t+ exp : ", " ".join([str(tempExplanation[i].cnf) for i in range(len(tempExplanation))]))
-                            nextNode = node(usedProfiles, tempExplanation, tempNormBasis)
+                        nextNode = self.getNextNode(currentNode, axiom, currentProfile, instance, one)
 
-                            if nextNode.discovered == False:
-                                nextNode.setDiscovered()
-                                queue.append(nextNode)
-            print("new")
+                        if nextNode and nextNode.discovered == False:
+                            nextNode.setDiscovered()
+                            queue.append(nextNode)
+            l += 1
+            print("new", queue[0])
             queue.pop(0)
             # for n in queue:
             #     print("newNode")
@@ -78,6 +67,23 @@ class findJUST2:
             # print(len(queue))
 
         return None, None
+
+    def getNextNode(self, currentNode, axiom, currentProfile, instance, one):
+        # print("\t\t",instance)
+        # print(instance.description, " ".join([currentNode.explanation[i].description for i in range(len(currentNode.explanation))]))
+        # print(instance.description in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))])
+        if instance.description not in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))]:
+            # print(currentNode.getProfiles() + [instance.getProfile()])
+            usedProfiles = list(set(currentNode.getProfiles() + [instance.getProfile()]))
+            tempExplanation = currentNode.getExp() + [instance] + [one.getInstancesCNF(prof) for prof in usedProfiles if prof not in currentNode.getProfiles()]
+            tempNormBasis = currentNode.getNormBasis() + [axiom]
+            # print("\t\t\tCreating new node ")
+            # print("\t\t\t+ used prof : ", usedProfiles)
+            # print("\t\t\t+ temexp : ", " ".join([str(tempExplanation[i]) for i in range(len(tempExplanation))]))
+            # print("\t\t\t+ exp : ", " ".join([str(tempExplanation[i].axiom) for i in range(len(tempExplanation))]))
+            # print("\t\t\t+ exp : ", " ".join([str(tempExplanation[i].cnf) for i in range(len(tempExplanation))]))
+            nextNode = node(usedProfiles, tempExplanation, tempNormBasis)
+            return nextNode
 
     def listAllProfiles(self, profile):
         start = [sorted(profile[0]) for _ in range(len(profile))]
@@ -92,10 +98,11 @@ class findJUST2:
     def printExplanation(self, exp, norm):
         print("+++++++++++++++++++++++++++++++++++++++++++++++")
         if exp:
-            print("Found an explanation of size ", len(exp) - 2, ":")
+            print("Found an explanation for why F(", self.targProfile.toString(),  ") = {", str(self.targOutcome), "}")
+            print("Found an explanation:")
             for instance in exp:
                 if instance.axiom.description != "at least one" and instance.axiom.description != "goal constraint":
-                    print(instance.toString())
+                    print("\t", instance.toString())
         else:
             print("No explanation found")
 
@@ -109,10 +116,10 @@ faith = Faithfulness()
 ano = Anonymity()
 neu = Neutrality()
 
-thing2 = findJUST2([[0,1,2], [1,0,2]], [0,1])
+thing2 = findJUST2([[0,1,2], [1,2,0], [2,0,1]], [1,0,2])
 
-exp, norm = thing2.solve2([con, can, faith, neu, ano, par])
+exp, norm = thing2.solve2([can, faith, con,neu, ano, par])
 thing2.printExplanation(exp, norm)
 toc = time.perf_counter()
-print(f"Look daddy! I did it in {toc - tic:0.4f} seconds")
+print(f"I did it in {toc - tic:0.4f} seconds")
 

@@ -10,7 +10,6 @@ class Neutrality():
         self.description = "neutrality"
 
     def getInstancesCNF(self, prof):
-        instances = []
         start = [sorted(prof.listProfile[0]) for _ in range(prof.nbVoters)]
         results = product(*[list(permutations(x)) for x in start])
         allProfiles = []
@@ -20,16 +19,12 @@ class Neutrality():
         
         
         instances = []
-        # for i in profiles(profile.nbAlternatives, profile.nbVoters, lambda i: i != profile.id):
-            # if iVariants(0, profile.id, i, profile.nbAlternatives):
-            #     print(allProfiles[i], profile.listProfile)
 
         ind = []
         xSkip = []
         for x in alternatives(prof.nbAlternatives, lambda x: x not in xSkip):
             xSkip += [x]
             for y in alternatives(prof.nbAlternatives, lambda y: y != x and y not in xSkip):
-                p2 = [[1,0,2],[0,1,2]] #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 p2 = self.swap(prof.getList(), x, y)
                 ind += [(allProfiles.index(p2), x, y)]
         cnfInstance = []
