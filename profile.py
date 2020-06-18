@@ -7,7 +7,7 @@ class profile:
         self.listProfile = listProfile
         # self.id = 2
         self.id = allProfiles.index(listProfile)
-        print(allProfiles[self.id])
+        # print(allProfiles[self.id])
         self.nbVoters = len(listProfile)
         self.nbAlternatives = len(listProfile[0])
 

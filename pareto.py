@@ -30,7 +30,7 @@ class ParetoAxiom:
             if x >= 0:
                 cnfInstance = [[negLiteral(profile.id, y, profile.nbAlternatives)]]
                 instDescription = str(y) + " not in F(" + profile.toString() + ") dominated by " + str(x)
-                instances += [instanceCNF(self, cnfInstance, instDescription)]
+                instances += [instanceCNF(self, cnfInstance, instDescription, profile)]
         return instances
 
 

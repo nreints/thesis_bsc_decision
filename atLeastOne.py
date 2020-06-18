@@ -8,7 +8,7 @@ class atLeastOne():
     def getInstancesCNF(self, profile):
         instCNF = [[posLiteral(profile.id, x, profile.nbAlternatives) for x in allAlternatives(profile.nbAlternatives)]]
         instDescription = "F(" + profile.toString() + ") != {}"
-        instance = instanceCNF(self, instCNF, instDescription)
+        instance = instanceCNF(self, instCNF, instDescription, profile)
         return instance
 
     def toString(self):

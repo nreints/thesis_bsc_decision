@@ -23,7 +23,7 @@ class Faithfulness:
             instCNF = [[posLiteral(profile.id, x, profile.nbAlternatives)]]
             instCNF += [[negLiteral(profile.id, y, profile.nbAlternatives)] for y in alternatives(profile.nbAlternatives, lambda y: x != y)]
             instDescription = "F(" + profile.toString() + ") = {" + str(x) + "}"
-            return [instanceCNF(self, instCNF, instDescription)]
+            return [instanceCNF(self, instCNF, instDescription, profile)]
         return []
 
     def getType(self):

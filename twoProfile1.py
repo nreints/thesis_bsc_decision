@@ -9,6 +9,7 @@ from cancellation import *
 from faithfulness import *
 from anonymity1 import *
 from neutrality1 import *
+import time
 
 class findJUST2:
     def __init__(self, targProfile, outcome):
@@ -54,7 +55,8 @@ class findJUST2:
                         # print(instance.description, " ".join([currentNode.explanation[i].description for i in range(len(currentNode.explanation))]))
                         # print(instance.description in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))])
                         if instance.description not in [currentNode.explanation[i].description for i in range(len(currentNode.explanation))]:
-                            usedProfiles = list(set(currentNode.getProfiles() + [currentProfile]))
+                            # print(currentNode.getProfiles() + [instance.getProfile()])
+                            usedProfiles = list(set(currentNode.getProfiles() + [instance.getProfile()]))
                             tempExplanation = currentNode.getExp() + [instance] + [one.getInstancesCNF(prof) for prof in usedProfiles if prof not in currentNode.getProfiles()]
                             tempNormBasis = currentNode.getNormBasis() + [axiom]
                             # print("\t\t\tCreating new node ")
@@ -67,8 +69,7 @@ class findJUST2:
                             if nextNode.discovered == False:
                                 nextNode.setDiscovered()
                                 queue.append(nextNode)
-
-            # print("NEW")
+            print("new")
             queue.pop(0)
             # for n in queue:
             #     print("newNode")
@@ -100,6 +101,7 @@ class findJUST2:
 
 
 
+tic = time.perf_counter()
 par = ParetoAxiom()
 con = CondorcetAxiom()
 can = Cancellation()
@@ -107,8 +109,10 @@ faith = Faithfulness()
 ano = Anonymity()
 neu = Neutrality()
 
-thing2 = findJUST2([[0,1,2], [1,0,2]], [0,1 ])
+thing2 = findJUST2([[0,1,2], [1,0,2]], [0,1])
+
 exp, norm = thing2.solve2([con, can, faith, neu, ano, par])
 thing2.printExplanation(exp, norm)
-
+toc = time.perf_counter()
+print(f"Look daddy! I did it in {toc - tic:0.4f} seconds")
 

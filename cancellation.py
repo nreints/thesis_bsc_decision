@@ -25,7 +25,7 @@ class Cancellation:
 
         if perfTie >= nbAlternatives:
             instDescription = "F(" + str(profile) + ") = X"
-            return [instance(self, allAlternatives(nbAlternatives), instDescription)]
+            return [instance(self, allAlternatives(nbAlternatives), instDescription, profile)]
         return []
 
     def getInstancesCNF(self, profile):
