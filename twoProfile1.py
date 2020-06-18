@@ -44,21 +44,22 @@ class findJUST2:
 
             # print("now checking exp", currentNode.getProfiles()[0].listProfile, "++ CNF", currentCNF)
             if solve(currentCNF) == "UNSAT":
-                print(l)
                 return currentNode.getExp(), currentNode.getNormBasis()
 
             for axiom in normativeBasis:
                 # print("for axiom ", axiom)
-                for currentProfile in currentNode.getProfiles():
+                currentProfiles = currentNode.getProfiles()
+                for currentProfile in currentProfiles:
                     # print("\t",currentProfile)
-                    for instance in axiom.getInstancesCNF(currentProfile):
+                    instances = axiom.getInstancesCNF(currentProfile, self.getAllProfiles())
+                    for instance in instances:
                         nextNode = self.getNextNode(currentNode, axiom, currentProfile, instance, one)
 
                         if nextNode and nextNode.discovered == False:
                             nextNode.setDiscovered()
                             queue.append(nextNode)
             l += 1
-            print("new", queue[0])
+            print("new", l, queue[0])
             queue.pop(0)
             # for n in queue:
             #     print("newNode")
@@ -67,6 +68,9 @@ class findJUST2:
             # print(len(queue))
 
         return None, None
+
+    def getAllProfiles(self):
+        return self.allProfiles
 
     def getNextNode(self, currentNode, axiom, currentProfile, instance, one):
         # print("\t\t",instance)
@@ -116,7 +120,7 @@ faith = Faithfulness()
 ano = Anonymity()
 neu = Neutrality()
 
-thing2 = findJUST2([[0,1,2], [1,2,0], [2,0,1]], [1,0,2])
+thing2 = findJUST2([[0,1,2], [1,0,2]], [1,0])
 
 exp, norm = thing2.solve2([can, faith, con,neu, ano, par])
 thing2.printExplanation(exp, norm)

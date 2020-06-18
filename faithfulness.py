@@ -16,7 +16,7 @@ class Faithfulness:
             return [instance(self, [winner], instDescription)]
         return []
 
-    def getInstancesCNF(self, profile):
+    def getInstancesCNF(self, profile, thing):
         if profile.nbVoters == 1:
             x = topAlternative(profile.listProfile[0])
             instCNF = [posLiteral(profile.id, x, profile.nbAlternatives)]

@@ -23,7 +23,7 @@ class ParetoAxiom:
                     inst += [instance(self, [y], instDescription)]
         return inst
 
-    def getInstancesCNF(self, profile):
+    def getInstancesCNF(self, profile, thing):
         instances = []
         for y in allAlternatives(profile.nbAlternatives):
             x = isDominated(y, profile)

@@ -24,7 +24,7 @@ class CondorcetAxiom:
                 return [instance(self, [x], instDescription)]
         return None
 
-    def getInstancesCNF(self, profile):
+    def getInstancesCNF(self, profile, thing):
         for x in allAlternatives(profile.nbAlternatives):
             timesY = 0
             for y in alternatives(profile.nbAlternatives, lambda y: x != y):
