@@ -28,7 +28,7 @@ class Cancellation:
             return [instance(self, allAlternatives(nbAlternatives), instDescription, profile)]
         return []
 
-    def getInstancesCNF(self, profile, thing):
+    def getInstancesCNF(self, profile):
         perfTie = 0
         xSkip = []
         for x in alternatives(profile.nbAlternatives, lambda x: x not in xSkip):

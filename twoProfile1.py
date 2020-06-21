@@ -36,12 +36,12 @@ class findJUST2:
 
         root = node(usedProfiles, explanation, normBasis)
         root.setDiscovered()
-
+        visited = []
         queue = [root]
         while queue != []:
             currentNode = queue[0]
             currentCNF = currentNode.getExpCNF()
-
+            visited += [currentNode.getExpCNF()]
             # print("now checking exp", currentNode.getProfiles()[0].listProfile, "++ CNF", currentCNF)
             if solve(currentCNF) == "UNSAT":
                 return currentNode.getExp(), currentNode.getNormBasis()
@@ -51,21 +51,20 @@ class findJUST2:
                 currentProfiles = currentNode.getProfiles()
                 for currentProfile in currentProfiles:
                     # print("\t",currentProfile)
-                    instances = axiom.getInstancesCNF(currentProfile, self.getAllProfiles())
+                    if axiom.description == "neutrality" or axiom.description == "anonymity":
+                        instances = axiom.getInstancesCNF(currentProfile, self.getAllProfiles())
+                    else:
+                        instances = axiom.getInstancesCNF(currentProfile)
+
                     for instance in instances:
                         nextNode = self.getNextNode(currentNode, axiom, currentProfile, instance, one)
 
-                        if nextNode and nextNode.discovered == False:
+                        if nextNode and nextNode.discovered == False and nextNode.getExpCNF() not in visited:
                             nextNode.setDiscovered()
                             queue.append(nextNode)
             l += 1
             print("new", l, queue[0])
             queue.pop(0)
-            # for n in queue:
-            #     print("newNode")
-            #     for prof in n.getProfiles():
-            #         print(prof.listProfile)
-            # print(len(queue))
 
         return None, None
 
@@ -108,7 +107,7 @@ class findJUST2:
                 if instance.axiom.description != "at least one" and instance.axiom.description != "goal constraint":
                     print("\t", instance.toString())
         else:
-            print("No explanation found")
+            print("Found no explanation")
 
 
 
@@ -120,7 +119,13 @@ faith = Faithfulness()
 ano = Anonymity()
 neu = Neutrality()
 
-thing2 = findJUST2([[0,1,2], [1,0,2]], [1,0])
+# thing2 = findJUST2([[0,1,2,3], [1,2,0,3], [2,0,1,3]], [1,0,2,3])
+thing2 = findJUST2([[0,1,2], [1,2,0], [2,0,1]], [1,0,2])
+
+# thing2 = findJUST2([[0,1], [0,1], [0,1]], [1])
+
+# # Works
+# thing2 = findJUST2([[0,1,2],[1,0,2]], [1,0])
 
 exp, norm = thing2.solve2([can, faith, con,neu, ano, par])
 thing2.printExplanation(exp, norm)
