@@ -5,7 +5,7 @@ from Axioms.condorcet import *
 from Axioms.faithfulness import *
 from Axioms.cancellation import *
 
-class FINDJUST1:
+class findJUST1:
 
     def __init__(self, profile, outcome):
         self.profile = profile
@@ -73,15 +73,14 @@ class FINDJUST1:
     # Print explanation
     def printExplanation(self, exp, normBasis):
         print("+++++++++++++++++++++++++++++++++++++++++++++++")
-        if not exp:
-            print("No explanation found")
-        else:
+        if exp:
             for key in exp:
                 print("Found an explanation of size ", len(exp[key]), ":")
-                print("\t Normative basis : ", ", ".join([exp.description for exp in normBasis[key]]))
                 for instance in exp[key]:
                     instance.toString()
                 print()
+        else:
+            print("Found no explanation")
 
 par = ParetoAxiom()
 con = CondorcetAxiom()
@@ -93,6 +92,6 @@ normativeBasis = [par, con, faith, can]
 targProfile = [[0,1,2], [0,1,2]]
 # Represent the target outcome as a list
 targOutcome = [0]
-oneProfile = FINDJUST1(targProfile, targOutcome)
+oneProfile = findJUST1(targProfile, targOutcome)
 exp, normBasis = oneProfile.solve(normativeBasis)
 oneProfile.printExplanation(exp, normBasis)
