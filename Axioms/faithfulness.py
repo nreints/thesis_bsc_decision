@@ -2,6 +2,7 @@ from helperFunctions import topAlternative, posLiteral, negLiteral, alternatives
 from instance import *
 
 class Faithfulness:
+    'Represents the faithfulness axiom'
 
     def __init__(self):
         self.description = "Faithfulness"

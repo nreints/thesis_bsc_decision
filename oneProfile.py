@@ -82,8 +82,8 @@ class findJUST1:
         else:
             print("Found no explanation")
 
-par = ParetoAxiom()
-con = CondorcetAxiom()
+par = Pareto()
+con = Condorcet()
 faith = Faithfulness()
 can = Cancellation()
 normativeBasis = [par, con, faith, can]

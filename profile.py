@@ -1,4 +1,6 @@
 class profile:
+    'Represents a profile'
+
     def __init__(self, listProfile, allProfiles):
         self.listProfile = listProfile
         self.id = allProfiles.index(listProfile)

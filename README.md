@@ -10,7 +10,7 @@ Handed in on June 26th at the University of Amsterdam.
 5. Neutrality
 6. Anonymity
 
-#### This code uses the packages numpy, collections and pylgl; 
+#### This code uses the packages numpy, collections and pylgl:
 please run `pip install -r requirements.txt` or `pip3 install -r requirements.txt` before running the code
 
 #### Two algorithms have been implemented:

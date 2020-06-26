@@ -2,8 +2,10 @@ from helperFunctions import negLiteral, posLiteral, alternatives
 from instance import instanceCNF
 
 class goalConstraint():
+    'Represents the goal constraint'
+
     def __init__(self):
-        self.description = "goal constraint"
+        self.description = "Goal constraint"
 
     # Return instances (twoProfile.py)
     def getInstancesCNF(self, profile, outcome):

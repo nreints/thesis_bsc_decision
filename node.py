@@ -1,4 +1,6 @@
 class node:
+    'Represents a node'
+
     def __init__(self, profiles, exp, normBasis):
         self.usedProfiles = profiles
         self.explanation = exp

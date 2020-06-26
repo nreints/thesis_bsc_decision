@@ -2,7 +2,8 @@ from helperFunctions import alternatives, allVoters, allAlternatives, prefers, p
 from instance import *
 
 class Cancellation:
-
+    'Represents the cancellation axiom'
+    
     def __init__(self):
         self.description = "Cancellation"
         self.type = "outcome"

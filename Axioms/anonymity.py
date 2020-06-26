@@ -3,9 +3,11 @@ from helperFunctions import profiles, posLiteral, negLiteral, allAlternatives
 from collections import Counter
 from profile import *
 
-class Anonymity():
+class Anonymity:
+    'Represents the anonymity axiom'
+
     def __init__(self):
-        self.description = "anonymity"
+        self.description = "Anonymity"
 
     # Return instances (twoProfile.py)
     def getInstancesCNF(self, prof, allProf):

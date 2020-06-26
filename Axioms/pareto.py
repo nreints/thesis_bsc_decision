@@ -1,15 +1,16 @@
 from helperFunctions import alternatives, allVoters, allAlternatives, prefers, negLiteral, isDominated
 from instance import *
 
-class ParetoAxiom:
+class Pareto:
+    'Represents the Pareto principle'
 
     def __init__(self):
-        self.description = "Pareto Principle"
+        self.description = "Pareto principle"
         self.type = "delete alt"
 
     # Return instances (oneProfile.py)
     def getInstances(self, profile, nbAlternatives, nbVoters):
-        deleteAlternative, inst = [], []
+        deleteAlternative, instances = [], []
         for x in allAlternatives(nbAlternatives):
             for y in alternatives(nbAlternatives, lambda y : y != x):
                 dominated = 0
@@ -19,8 +20,8 @@ class ParetoAxiom:
                 if dominated == nbVoters and y not in deleteAlternative:
                     deleteAlternative.append(y)
                     instDescription = str(y) + " not in F(" + str(profile) + ") dominated by " + str(x)
-                    inst += [instance(self, [y], instDescription)]
-        return inst
+                    instances += [instance(self, [y], instDescription)]
+        return instances
 
     # Return instances (twoProfile.py)
     def getInstancesCNF(self, profile):

@@ -2,8 +2,10 @@ from helperFunctions import posLiteral, allAlternatives
 from instance import instanceCNF
 
 class atLeastOne():
+    'Represents the at least one requirement'
+
     def __init__(self):
-        self.description = "at least one"
+        self.description = "At least one"
 
     # Return instances (twoProfile.py)
     def getInstancesCNF(self, profile):

@@ -1,7 +1,11 @@
+# 
+# Functions that are used in various files, mainly to encode the restrictions
+# of the axioms. Some code is taken from the slides of Ulle Endriss
+# https://staff.science.uva.nl/u.endriss/teaching/comsoc/2020/slides/comsoc-automated-reasoning-2020.pdf
+
 from itertools import combinations, permutations, chain, product
 from math import factorial
 from collections import Counter
-
 
 # Return all voters
 def allVoters(n):

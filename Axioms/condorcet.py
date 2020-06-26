@@ -1,10 +1,11 @@
 from helperFunctions import alternatives, allAlternatives, prefers, prefers2, allVoters, posLiteral, negLiteral
 from instance import *
 
-class CondorcetAxiom:
+class Condorcet:
+    'Represents the Condorcet principle'
 
     def __init__(self):
-        self.description = "Condorcet Principle"
+        self.description = "Condorcet principle"
         self.type = "outcome"
 
     # Return instances (oneProfile.py)
@@ -21,7 +22,7 @@ class CondorcetAxiom:
             if timesY == nbAlternatives - 1:
                 instDescription = "F(" + str(profile) + ") = {" + str(x) + "}"
                 return [instance(self, [x], instDescription)]
-        return None
+        return []
 
     # Return instances (twoProfile.py)
     def getInstancesCNF(self, profile):

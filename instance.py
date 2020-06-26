@@ -1,5 +1,6 @@
 # Instance object (oneProfile.py)
 class instance:
+    'Represents an instance'
     def __init__(self, axiom, alternatives, description):
         self.axiom = axiom
         self.alternatives = alternatives
@@ -19,6 +20,7 @@ class instance:
 
 # Instance object (twoProfile.py)
 class instanceCNF:
+    'Represents an CNF instance'
     def __init__(self, axiom, cnf, description, profiles):
         self.axiom = axiom
         self.cnf = cnf

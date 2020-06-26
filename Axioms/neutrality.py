@@ -6,9 +6,12 @@ from profile import *
 import copy
 
 class Neutrality():
-    def __init__(self):
-        self.description = "neutrality"
+    'Represents the neutrality axiom'
 
+    def __init__(self):
+        self.description = "Neutrality"
+
+    # Return instances (twoProfile.py)
     def getInstancesCNF(self, prof, allProf):
         instances = []
         ind = []
@@ -29,6 +32,7 @@ class Neutrality():
             instances.append(instance)
         return instances
 
+    # Return profile with swapped alternatives x and y
     def swap(self, profile, x, y):
         copyProf = copy.deepcopy(profile)
         for i in range(len(copyProf)):
@@ -38,5 +42,6 @@ class Neutrality():
             copyProf[i][indY] = x
         return copyProf
 
+    # Return aixom description
     def toString(self):
         return self.description

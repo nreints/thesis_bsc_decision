@@ -49,7 +49,7 @@ class findJUST2:
             for axiom in normativeBasis:
                 currentProfiles = currentNode.getProfiles()
                 for currentProfile in currentProfiles:
-                    if axiom.description == "neutrality" or axiom.description == "anonymity":
+                    if axiom.description == "Neutrality" or axiom.description == "Anonymity":
                         instances = axiom.getInstancesCNF(currentProfile, self.getAllProfiles())
                     else:
                         instances = axiom.getInstancesCNF(currentProfile)
@@ -86,20 +86,22 @@ class findJUST2:
         if exp:
             print("Found an explanation:")
             for instance in exp:
-                if instance.axiom.description != "at least one" and instance.axiom.description != "goal constraint":
+                if instance.axiom.description != "At least one" and instance.axiom.description != "Goal constraint":
                     print("\t", instance.toString())
         else:
             print("Found no explanation")
 
-par = ParetoAxiom()
-con = CondorcetAxiom()
+par = Pareto()
+con = Condorcet()
 can = Cancellation()
 faith = Faithfulness()
 ano = Anonymity()
 neu = Neutrality()
 normativeBasis = [can, faith, con, par, neu, ano]
 
+# A sublist in the profile is the preference of one agent
 targProfile = [[0, 1, 2], [1, 0, 2]]
+# Represent the target outcome as a list
 targOutcome = [0, 1]
 
 twoProfile = findJUST2(targProfile, targOutcome)
