@@ -19,7 +19,7 @@ class findJUST2:
         self.visitedDict = {}
 
 
-    def solve2(self, normativeBasis):
+    def solve(self, normativeBasis):
         print("............ Trying to find a justification .........")
         print("   .... The target profile is: ", self.targProfile.toString())
         print("   .... The target outcome is: ", self.targOutcome)
@@ -84,7 +84,6 @@ class findJUST2:
     def printExplanation(self, exp, norm):
         print("+++++++++++++++++++++++++++++++++++++++++++++++")
         if exp:
-            print("Found an explanation for why F(", self.targProfile.toString(),  ") = {", str(self.targOutcome), "}")
             print("Found an explanation:")
             for instance in exp:
                 if instance.axiom.description != "at least one" and instance.axiom.description != "goal constraint":
@@ -104,5 +103,5 @@ targProfile = [[0, 1, 2], [1, 0, 2]]
 targOutcome = [0, 1]
 
 twoProfile = findJUST2(targProfile, targOutcome)
-exp, normBasis = twoProfile.solve2(normativeBasis)
+exp, normBasis = twoProfile.solve(normativeBasis)
 twoProfile.printExplanation(exp, normBasis)
