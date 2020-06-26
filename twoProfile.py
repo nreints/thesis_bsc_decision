@@ -64,7 +64,7 @@ class findJUST2:
 
     # Check if nextNode already has been visited
     def alreadyVisited(self, nextNode):
-        return Counter([nextNode.explanation[i].description for i in range(len(nextNode.explanation))]) not in [Counter(val) for val in self.visitedDict.values()]
+        return Counter([exp.description for exp in nextNode.explanation]) not in [Counter(val) for val in self.visitedDict.values()]
 
     # Return all profiles
     def getAllProfiles(self):
