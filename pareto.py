@@ -1,6 +1,5 @@
 from helperFunctions import alternatives, allVoters, allAlternatives, prefers, negLiteral, isDominated
 from instance import *
-from instanceCNF import *
 
 class ParetoAxiom:
 
@@ -8,7 +7,7 @@ class ParetoAxiom:
         self.description = "Pareto Principle"
         self.type = "delete alt"
 
-    # Get instances
+    # Return instances (oneProfile.py)
     def getInstances(self, profile, nbAlternatives, nbVoters):
         deleteAlternative, inst = [], []
         for x in allAlternatives(nbAlternatives):
@@ -23,6 +22,7 @@ class ParetoAxiom:
                     inst += [instance(self, [y], instDescription)]
         return inst
 
+    # Return instances (twoProfile.py)
     def getInstancesCNF(self, profile):
         instances = []
         for y in allAlternatives(profile.nbAlternatives):
@@ -33,9 +33,10 @@ class ParetoAxiom:
                 instances += [instanceCNF(self, cnfInstance, instDescription, profile)]
         return instances
 
-
+    # Return type of axiom
     def getType(self):
         return self.type
 
+    # Return aixom description
     def toString(self):
         return self.description

@@ -1,6 +1,5 @@
-from instanceCNF import *
-from helperFunctions import profiles, iVariants, posLiteral, negLiteral, allAlternatives
-from itertools import product, permutations
+from instance import instanceCNF
+from helperFunctions import profiles, posLiteral, negLiteral, allAlternatives
 from collections import Counter
 from profile import *
 
@@ -8,10 +7,10 @@ class Anonymity():
     def __init__(self):
         self.description = "anonymity"
 
+    # Return instances (twoProfile.py)
     def getInstancesCNF(self, prof, allProf):
         instances = []
         for i in profiles(prof.nbAlternatives, prof.nbVoters, lambda i: i != prof.id):
-
             if i <= prof.id:
                 continue
             l1 = [str(sub) for sub in prof.listProfile]
@@ -25,5 +24,6 @@ class Anonymity():
                 instances.append(instance)
         return instances
 
+    # Return aixom description
     def toString(self):
         return self.description

@@ -5,7 +5,6 @@ from condorcet import *
 from faithfulness import *
 from cancellation import *
 
-
 class FINDJUST1:
 
     def __init__(self, profile, outcome):
@@ -27,7 +26,6 @@ class FINDJUST1:
 
         # Create list of all possible outcomes
         posOutcomes = list(allSublists(self.profile[0]))
-
         # Delete target outcome from possible outcomes
         posOutcomes = removeOutcome(posOutcomes, self.outcome)
 
@@ -35,13 +33,12 @@ class FINDJUST1:
             if axiom.getType() == "outcome":
                 instances = axiom.getInstances(self.profile, self.nbAlternatives, self.nbVoters)
                 if instances:
-                    for instance in instances:
-                        winner = instance.getAlternatives()
-                        # Check if winner is target outcome
-                        if Counter(winner) == Counter(self.outcome):
-                            explanation[nbExp] = [instance]
-                            normBasis[nbExp] = [axiom]
-                            nbExp += 1
+                    winner = instances[0].getAlternatives()
+                    # Check if winner is target outcome
+                    if Counter(winner) == Counter(self.outcome):
+                        explanation[nbExp] = [instances[0]]
+                        normBasis[nbExp] = [axiom]
+                        nbExp += 1
 
             posExplanation = []
             if axiom.getType() == "delete alt":
@@ -71,7 +68,6 @@ class FINDJUST1:
                 explanation[nbExp] = [instance for instance in posExplanation]
                 normBasis[nbExp] = [instance.getAxiom() for instance in posExplanation]
                 nbExp += 1
-
         return explanation, normBasis
 
     # Print explanation
@@ -87,14 +83,16 @@ class FINDJUST1:
                     instance.toString()
                 print()
 
-
-
 par = ParetoAxiom()
 con = CondorcetAxiom()
 faith = Faithfulness()
 can = Cancellation()
 normativeBasis = [par, con, faith, can]
 
-thing = FINDJUST1([[2,0,1]], [2])
-exp, normBasis = thing.solve(normativeBasis)
-thing.printExplanation(exp, normBasis)
+# A sublist in the profile is the preference of one agent
+targProfile = [[0,1,2], [0,1,2]]
+# Represent the target outcome as a list
+targOutcome = [0]
+oneProfile = FINDJUST1(targProfile, targOutcome)
+exp, normBasis = oneProfile.solve(normativeBasis)
+oneProfile.printExplanation(exp, normBasis)

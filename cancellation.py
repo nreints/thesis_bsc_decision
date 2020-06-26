@@ -1,6 +1,5 @@
 from helperFunctions import alternatives, allVoters, allAlternatives, prefers, prefers2, posLiteral
 from instance import *
-from instanceCNF import *
 
 class Cancellation:
 
@@ -8,6 +7,7 @@ class Cancellation:
         self.description = "Cancellation"
         self.type = "outcome"
 
+    # Return instances (oneProfile.py)
     def getInstances(self, profile, nbAlternatives, nbVoters):
         perfTie = 0
         xSkip = []
@@ -28,6 +28,7 @@ class Cancellation:
             return [instance(self, allAlternatives(nbAlternatives), instDescription, profile)]
         return []
 
+    # Return instances (twoProfile.py)
     def getInstancesCNF(self, profile):
         perfTie = 0
         xSkip = []
@@ -49,8 +50,10 @@ class Cancellation:
             return [instanceCNF(self, instCNF, instDescription)]
         return []
 
+    # Return type of axiom
     def getType(self):
         return self.type
 
+    # Return aixom description
     def toString(self):
         return self.description

@@ -1,6 +1,5 @@
-from instance import *
 from helperFunctions import topAlternative, posLiteral, negLiteral, alternatives
-from instanceCNF import *
+from instance import *
 
 class Faithfulness:
 
@@ -8,7 +7,7 @@ class Faithfulness:
         self.description = "Faithfulness"
         self.type = "outcome"
 
-    #  Return instances
+    #  Return instances (oneProfile.py)
     def getInstances(self, profile, nbAlternatives, nbVoters):
         if nbVoters == 1:
             instDescription = "F(" + str(profile) + ") = {" + str(profile[0][0]) + "}"
@@ -16,6 +15,7 @@ class Faithfulness:
             return [instance(self, [winner], instDescription)]
         return []
 
+    # Return instances (twoProfile.py)
     def getInstancesCNF(self, profile):
         if profile.nbVoters == 1:
             x = topAlternative(profile.listProfile[0])
@@ -26,8 +26,10 @@ class Faithfulness:
             return [instanceCNF(self, instCNF, instDescription, profile)]
         return []
 
+    # Return type of axiom
     def getType(self):
         return self.type
 
+    # Return aixom description
     def toString(self):
         return self.description

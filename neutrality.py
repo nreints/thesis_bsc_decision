@@ -1,9 +1,8 @@
 from itertools import permutations, product
 from helperFunctions import profiles, allAlternatives, negLiteral, posLiteral, alternatives
 from collections import Counter
-from instanceCNF import *
+from instance import instanceCNF
 from profile import *
-# from profile import getList
 import copy
 
 class Neutrality():
