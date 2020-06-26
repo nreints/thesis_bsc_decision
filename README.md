@@ -1,4 +1,4 @@
-# Efficient generation of justifications for collective decision making
+# Efficient Generation of Justifications for Collective Decision Making
 This code has been implemented for the bachelor thesis: Efficient Generation of Justifications for Collective Decision Making.
 Handed in on June 26th at the University of Amsterdam.
 
