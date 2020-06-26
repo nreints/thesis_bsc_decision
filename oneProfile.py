@@ -1,9 +1,9 @@
 from collections import Counter
 from helperFunctions import allSublists, allVoters, allAlternatives, removeOutcome
-from pareto import *
-from condorcet import *
-from faithfulness import *
-from cancellation import *
+from Axioms.pareto import *
+from Axioms.condorcet import *
+from Axioms.faithfulness import *
+from Axioms.cancellation import *
 
 class FINDJUST1:
 

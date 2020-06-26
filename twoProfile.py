@@ -1,14 +1,14 @@
 from profile import *
 from node import *
 from pylgl import solve
-from atLeastOne import *
-from goalConstraint import *
-from pareto import *
-from condorcet import *
-from cancellation import *
-from faithfulness import *
-from anonymity import *
-from neutrality import *
+from Axioms.atLeastOne import *
+from Axioms.goalConstraint import *
+from Axioms.pareto import *
+from Axioms.condorcet import *
+from Axioms.cancellation import *
+from Axioms.faithfulness import *
+from Axioms.anonymity import *
+from Axioms.neutrality import *
 from helperFunctions import *
 
 class findJUST2:
